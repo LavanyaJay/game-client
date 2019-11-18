@@ -4,11 +4,11 @@ import { connect } from "react-redux";
 import { login } from "../actions/login";
 
 class LoginFormContainer extends React.Component {
-  state = { email: "", password: "" };
+  state = { username: "", password: "" };
 
   onSubmit = event => {
     event.preventDefault();
-    this.props.login(this.state.email, this.state.password);
+    this.props.login(this.state.username, this.state.password);
   };
 
   onChange = event => {
@@ -18,14 +18,28 @@ class LoginFormContainer extends React.Component {
   };
 
   render() {
+
+    const user = this.props.user;
+
     return (
-      <LoginForm
-        onSubmit={this.onSubmit}
-        onChange={this.onChange}
-        values={this.state}
-      />
+      <div>
+      { user ? 
+        <p>Welcome back, {this.props.user.username}</p>
+      :  
+        <LoginForm
+          onSubmit={this.onSubmit}
+          onChange={this.onChange}
+          values={this.state}
+        />
+      }
+        </div> 
     );
   }
 }
 
-export default connect(null, { login })(LoginFormContainer);
+
+function mapStateToProps(state) {
+	return { user: state.user };
+}
+
+export default connect(mapStateToProps, { login })(LoginFormContainer);

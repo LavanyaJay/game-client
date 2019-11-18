@@ -6,9 +6,9 @@ export default function LoginForm(props) {
       <form onSubmit={event => props.onSubmit(event)}>
         <label>Username:</label>
         <input
-          name="email"
+          name="username"
           onChange={props.onChange}
-          value={props.values.email}
+          value={props.values.username}
         />
         <label>Password:</label>
         <input

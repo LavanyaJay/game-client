@@ -11,9 +11,9 @@ export default function(state = "", action = {}) {
         isAuthenticating: false,
         errorMessage: action.errorMessage
       };
-    case "LOGIN_SUCCESS":
-      console.log("reducer", action.JWT);
-      return action.JWT;
+    case "AUTHENTICATION_JWT":
+      console.log("reducer AUTH_JWT", action.payload);
+      return action.payload;
 
     case "LOGOUT":
       return {

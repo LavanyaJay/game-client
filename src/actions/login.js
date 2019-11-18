@@ -1,8 +1,8 @@
 import request from "superagent";
-const baseUrl = "http://localhost:3001";
+const baseUrl = "http://localhost:4000";
 
-export const login = (useremail, userpw) => dispatch => {
-  const data = { email: useremail, password: userpw };
+export const login = (username, userpw) => dispatch => {
+  const data = { username: username, password: userpw };
   console.log("login action:", data);
   /* dispatch({ type: "LOGIN_REQUEST " }); */
   request
@@ -10,10 +10,7 @@ export const login = (useremail, userpw) => dispatch => {
     .send(data)
     .then(response => {
       console.log("inresponse", response.body.jwt);
-      dispatch({
-        type: "LOGIN_SUCCESS",
-        JWT: response.body.jwt
-      });
+      dispatch(jwt(response.body.jwt, username));
     })
     .catch(res => {
       console.log("error", res);
@@ -22,3 +19,12 @@ export const login = (useremail, userpw) => dispatch => {
 			}); */
     });
 };
+
+export const AUTHENTICATION_JWT = 'AUTHENTICATION_JWT';
+
+export function jwt(jwt, username) {
+	return {
+		type: AUTHENTICATION_JWT,
+		payload: { jwt: jwt, username: username }
+	};
+}
