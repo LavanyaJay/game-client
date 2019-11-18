@@ -1,24 +1,35 @@
 import React from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Form, Button } from "react-bootstrap";
 
 export default function LoginForm(props) {
   return (
     <div>
-      <form onSubmit={event => props.onSubmit(event)}>
-        <label>Username:</label>
-        <input
-          name="username"
-          onChange={props.onChange}
-          value={props.values.username}
-        />
-        <label>Password:</label>
-        <input
-          name="password"
-          onChange={props.onChange}
-          value={props.values.password}
-        />
+      <Form onSubmit={event => props.onSubmit(event)}>
+        <Form.Group controlId="formBasicUsername">
+          <Form.Control
+            type="text"
+            placeholder="Enter username"
+            name="username"
+            onChange={props.onChange}
+            value={props.values.username}
+          />
+        </Form.Group>
 
-        <input type="submit" value="Login" />
-      </form>
+        <Form.Group controlId="formBasicPassword">
+          <Form.Control
+            type="password"
+            placeholder="Password"
+            name="password"
+            onChange={props.onChange}
+            value={props.values.password}
+          />
+        </Form.Group>
+
+        <Button variant="primary" type="submit">
+          Submit
+        </Button>
+      </Form>
     </div>
   );
 }
