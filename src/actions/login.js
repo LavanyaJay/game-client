@@ -20,11 +20,29 @@ export const login = (username, userpw) => dispatch => {
     });
 };
 
-export const AUTHENTICATION_JWT = 'AUTHENTICATION_JWT';
+export const AUTHENTICATION_JWT = "AUTHENTICATION_JWT";
 
 export function jwt(jwt, username) {
-	return {
-		type: AUTHENTICATION_JWT,
-		payload: { jwt: jwt, username: username }
-	};
+  return {
+    type: AUTHENTICATION_JWT,
+    payload: { jwt: jwt, username: username }
+  };
 }
+export const signup = (username, userpw) => dispatch => {
+  const data = { username: username, password: userpw };
+  console.log("signup action:", data);
+  /* dispatch({ type: "LOGIN_REQUEST " }); */
+  request
+    .post(`${baseUrl}/user`)
+    .send(data)
+    .then(response => {
+      console.log("inresponse", response.body);
+      dispatch(login(username, userpw));
+    })
+    .catch(res => {
+      console.log("error", res);
+      /* dispatch({
+                    type: "LOGIN_FAILURE"
+                }); */
+    });
+};
