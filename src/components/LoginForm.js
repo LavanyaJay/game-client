@@ -1,8 +1,10 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Form, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 export default function LoginForm(props) {
+  console.log(props.id);
   return (
     <div>
       <Form onSubmit={event => props.onSubmit(event)}>
@@ -30,6 +32,7 @@ export default function LoginForm(props) {
           Submit
         </Button>
       </Form>
+      <Link to="/">Back to home</Link>
     </div>
   );
 }
