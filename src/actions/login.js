@@ -14,9 +14,6 @@ export const login = (username, userpw) => dispatch => {
     })
     .catch(res => {
       console.log("error", res);
-      /* dispatch({
-				type: "LOGIN_FAILURE"
-			}); */
     });
 };
 
@@ -31,7 +28,7 @@ export function jwt(jwt, username) {
 export const signup = (username, userpw) => dispatch => {
   const data = { username: username, password: userpw };
   console.log("signup action:", data);
-  /* dispatch({ type: "LOGIN_REQUEST " }); */
+
   request
     .post(`${baseUrl}/user`)
     .send(data)
@@ -41,8 +38,5 @@ export const signup = (username, userpw) => dispatch => {
     })
     .catch(res => {
       console.log("error", res);
-      /* dispatch({
-                    type: "LOGIN_FAILURE"
-                }); */
     });
 };
