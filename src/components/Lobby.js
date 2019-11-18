@@ -5,7 +5,7 @@ import superagent from "superagent";
 import { Link } from "react-router-dom";
 
 class Lobby extends Component {
-  stream = new EventSource("http://localhost:4000/stream");
+  stream = new EventSource(`${url}/stream`);
   state = {
     rooms: [],
     value: ""
@@ -53,9 +53,9 @@ class Lobby extends Component {
     event.preventDefault();
     const value = this.state.value;
 
-    const url = "http://localhost:4000/room";
+    const postUrl = `${url}/room`;
     superagent
-      .post(url)
+      .post(postUrl)
       .send({ name: value })
       .then(res => {
         console.log("testing response: ", res);
