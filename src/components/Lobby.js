@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { url } from "../constants";
 import superagent from "superagent";
 import { Link } from "react-router-dom";
+import { loadLobby } from "../actions/lobby";
 
 class Lobby extends Component {
   stream = new EventSource(`${url}/stream`);
@@ -12,27 +13,7 @@ class Lobby extends Component {
   };
 
   componentDidMount() {
-    console.log("didmount");
-    //Destructure data that was passed to stream.send
-    this.stream.onmessage = event => {
-      const { data } = event;
-
-      console.log("data ", data);
-
-      //Convert serilaize string to JSON string
-      const parsed = JSON.parse(data);
-      console.log("parsed: ", parsed);
-      const rooms = [...this.state.rooms, parsed.name];
-      this.setState({ rooms });
-      /* if (Array.isArray(parsed)) {
-        this.setState({ rooms: parsed });
-      } else {
-        const rooms = [...this.state.rooms, parsed];
-        this.setState({ rooms });
-      }
- */
-      console.log("data test: ", data);
-    };
+    this.props.loadLobby(this.stream);
   }
 
   onChange = event => {
@@ -41,15 +22,6 @@ class Lobby extends Component {
   };
 
   onSubmit = event => {
-    //stops the form from reloading the page
-    /* event.preventDefault();
-    const { value } = this.state;
-    superagent
-      .post(`${url}/room`)
-      .set("Authorization", `Bearer ${this.props.user.jwt}`)
-      .send({ name: value })
-      .then(response => console.log(response));
-	this.setState({ value: "" }); */
     event.preventDefault();
     const value = this.state.value;
 
@@ -63,7 +35,7 @@ class Lobby extends Component {
   };
 
   render() {
-    const list = this.state.rooms.map((name, index) => (
+    const list = this.props.lobby.map((name, index) => (
       <p key={index}>
         <Link to={`/room/${name}`}>{name}</Link>
       </p>
@@ -88,7 +60,8 @@ class Lobby extends Component {
 }
 
 function mapStateToProps(state) {
-  return { user: state.user };
+  console.log(state.lobby);
+  return { lobby: state.lobby };
 }
 
-export default connect(mapStateToProps)(Lobby);
+export default connect(mapStateToProps, { loadLobby })(Lobby);

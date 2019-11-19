@@ -2,14 +2,17 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Form, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import "../App.css";
 
 export default function LoginForm(props) {
   console.log(props.id);
   return (
-    <div>
+    <div className="loginForm">
       <Form onSubmit={event => props.onSubmit(event)}>
         <Form.Group controlId="formBasicUsername">
+          <Form.Label>UserName</Form.Label>
           <Form.Control
+            className="input"
             type="text"
             placeholder="Enter username"
             name="username"
@@ -19,7 +22,9 @@ export default function LoginForm(props) {
         </Form.Group>
 
         <Form.Group controlId="formBasicPassword">
+          <Form.Label>Password</Form.Label>
           <Form.Control
+            className="input"
             type="password"
             placeholder="Password"
             name="password"
