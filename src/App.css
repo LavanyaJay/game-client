@@ -20,3 +20,45 @@
 .App-link {
   color: #09d3ac;
 }
+.game-board {
+  display: grid;
+  border: 1px blue solid;
+  justify-content: center;
+}
+.box {
+  background-color: lightblue;
+  border: 1px blue solid;
+  width: 80px;
+  height: 80px;
+
+  color: white;
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.loginForm {
+  border: 2px solid black;
+  height: 300px;
+  width: 500px;
+  justify-content: center;
+}
+
+.input {
+  width: 200px;
+}
+
+.blueSqr {
+  background-image: url("http://www.clker.com/cliparts/G/9/u/6/t/2/blue-square-hi.png");
+  background-size: 80px 80px;
+}
+
+.redSqr {
+  background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSEb4csW4AeKOxEJu9K89ggJLV_Odn-s7h617LCdhVN9Y86ab0c&s");
+  background-size: 80px 80px;
+}
+
+.yellowSqr {
+  background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvktTbSbjN4n8ZGAsSMl61zud8YsfxkzkbUq2Cg4YbNKm9dyJH&s");
+  background-size: 80px 80px;
+}
