@@ -1,16 +1,16 @@
 import request from "superagent";
-const baseUrl = "http://localhost:4000";
+import {url} from '../constants';
 
 export const login = (username, userpw) => dispatch => {
   const data = { username: username, password: userpw };
   console.log("login action:", data);
   /* dispatch({ type: "LOGIN_REQUEST " }); */
   request
-    .post(`${baseUrl}/login`)
+    .post(`${url}/login`)
     .send(data)
     .then(response => {
-      console.log("inresponse", response.body.jwt);
-      dispatch(jwt(response.body.jwt, username));
+      console.log("inresponse", response.body);
+      dispatch(jwt(response.body.jwt, username, response.body.userId));
     })
     .catch(res => {
       console.log("error", res);
@@ -30,7 +30,7 @@ export const signup = (username, userpw) => dispatch => {
   console.log("signup action:", data);
 
   request
-    .post(`${baseUrl}/user`)
+    .post(`${url}/user`)
     .send(data)
     .then(response => {
       console.log("inresponse", response.body);
@@ -45,12 +45,12 @@ export const signup = (username, userpw) => dispatch => {
 export const joinGame = roomId => (dispatch, getState) => {
   const state = getState();
   const { user } = state;
-  console.log(user.username);
+  console.log('this is the user :', user);
   /* const data = { userId: userId, roomId: roomId };
   console.log("login action:", data);
   /* dispatch({ type: "LOGIN_REQUEST " }); 
   request
-    .patch(`${baseUrl}/join`)
+    .patch(`${url}/join`)
     .send(data)
     .then(response => {
       console.log("inresponse", response.body);

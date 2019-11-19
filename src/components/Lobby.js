@@ -12,10 +12,6 @@ class Lobby extends Component {
     value: ""
   };
 
-  componentDidMount() {
-    this.props.loadLobby(this.stream);
-  }
-
   onChange = event => {
     const { value } = event.target;
     this.setState({ value });
@@ -35,7 +31,7 @@ class Lobby extends Component {
   };
 
   render() {
-    const list = this.props.lobby.map((room, index) => (
+    const list = this.props.rooms.map((room, index) => (
       <p key={index}>
         <Link to={`/room/${room.id}`}>{room.name}</Link>
       </p>
@@ -60,8 +56,7 @@ class Lobby extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state.lobby);
-  return { lobby: state.lobby };
+  return { rooms: state.rooms };
 }
 
 export default connect(mapStateToProps, { loadLobby })(Lobby);
