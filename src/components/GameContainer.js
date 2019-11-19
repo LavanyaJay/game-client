@@ -9,9 +9,8 @@ class GameContainer extends Component {
     const roomId = this.props.match.params.roomId;
     return (
       <div>
-        <p>Hello, {roomId}</p>
         <ScoreboardContainer />
-        <BoardContainer roomId={this.props.match.params.roomId} />
+        <BoardContainer name={this.props.match.params.name} />
       </div>
     );
   }

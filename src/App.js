@@ -15,12 +15,11 @@ class App extends Component {
   componentDidMount(){
     this.stream.onmessage = (event) => {
       const { data } = event;
-      console.log(event);
+      //console.log(event);
     //Convert serialize string to JSON string
       const parsed = JSON.parse(data);
-
+console.log('parsed', parsed)
       this.props.dispatch(parsed); 
-      console.log('parsed test:', parsed)
     }
   }
 
@@ -30,7 +29,7 @@ class App extends Component {
           <Route path="/" component={Main} exact></Route>
           <Route path="/signup/:id" component={LoginFormContainer}></Route>
           <Route path="/login/:id" component={LoginFormContainer}></Route>
-          <Route path="/room/:roomId" component={GameContainer}></Route>
+          <Route path="/room/:name" component={GameContainer}></Route>
         </Fragment>
     );
   }
