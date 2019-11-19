@@ -35,9 +35,9 @@ class Lobby extends Component {
   };
 
   render() {
-    const list = this.props.lobby.map((name, index) => (
+    const list = this.props.lobby.map((room, index) => (
       <p key={index}>
-        <Link to={`/room/${name}`}>{name}</Link>
+        <Link to={`/room/${room.id}`}>{room.name}</Link>
       </p>
     ));
     return (

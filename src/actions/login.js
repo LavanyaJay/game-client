@@ -40,3 +40,23 @@ export const signup = (username, userpw) => dispatch => {
       console.log("error", res);
     });
 };
+
+//Joining Game
+export const joinGame = roomId => (dispatch, getState) => {
+  const state = getState();
+  const { user } = state;
+  console.log(user.username);
+  /* const data = { userId: userId, roomId: roomId };
+  console.log("login action:", data);
+  /* dispatch({ type: "LOGIN_REQUEST " }); 
+  request
+    .patch(`${baseUrl}/join`)
+    .send(data)
+    .then(response => {
+      console.log("inresponse", response.body);
+      //dispatch(jwt(response.body.jwt, username));
+    })
+    .catch(res => {
+      console.log("error", res);
+    }); */
+};
