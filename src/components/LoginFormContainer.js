@@ -2,6 +2,7 @@ import React from "react";
 import LoginForm from "./LoginForm";
 import { connect } from "react-redux";
 import { login, signup } from "../actions/login";
+import { Link } from 'react-router-dom';
 
 class LoginFormContainer extends React.Component {
   state = { username: "", password: "" };
@@ -29,8 +30,10 @@ class LoginFormContainer extends React.Component {
     const user = this.props.user;
     return (
       <div>
-        {user ? (
+        {user ? (<div>
           <p>Welcome back, {this.props.user.username}</p>
+          <Link to='/'><p>Go back home</p></Link>
+          </div>
         ) : (
           <LoginForm
             onSubmit={this.onSubmit}

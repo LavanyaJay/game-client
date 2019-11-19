@@ -12,10 +12,6 @@ class Lobby extends Component {
     value: ""
   };
 
-  componentDidMount() {
-    this.props.loadLobby(this.stream);
-  }
-
   onChange = event => {
     const { value } = event.target;
     this.setState({ value });
@@ -35,14 +31,26 @@ class Lobby extends Component {
   };
 
   render() {
-    const list = this.props.lobby.map((room, index) => (
+    const list = this.props.rooms.map((room, index) => (
       <p key={index}>
-        <Link to={`/room/${room.id}`}>{room.name}</Link>
+        <Link to={`/room/${room.name}`}>{room.name}</Link>
       </p>
     ));
     return (
       <div>
-        This is the lobby. There will be rooms here.
+{/* 
+      {user ? (<div>
+          <p>Welcome back, {this.props.user.username}</p>
+          <Link to='/'><p>Go back home</p></Link>
+          </div>
+        ) : (
+          <LoginForm
+            onSubmit={this.onSubmit}
+            onChange={this.onChange}
+            values={this.state}
+          />
+        )} */}
+
         <form onSubmit={this.onSubmit}>
           <label>Lobby Name</label>
           <input
@@ -60,8 +68,7 @@ class Lobby extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state.lobby);
-  return { lobby: state.lobby };
+  return { rooms: state.rooms, user: state.user   };
 }
 
 export default connect(mapStateToProps, { loadLobby })(Lobby);
