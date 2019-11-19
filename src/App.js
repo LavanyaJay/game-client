@@ -6,6 +6,7 @@ import store from "./store";
 import { Provider } from "react-redux";
 import Main from "./components/Main";
 import LoginFormContainer from "./components/LoginFormContainer";
+import GameContainer from "./components/GameContainer";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" component={Main} exact></Route>
         <Route path="/signup/:id" component={LoginFormContainer}></Route>
         <Route path="/login/:id" component={LoginFormContainer}></Route>
+        <Route path="/room/:roomId" component={GameContainer}></Route>
       </Fragment>
     </Provider>
   );
