@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { joinGame, startGame } from "../actions/login";
 import {url} from '../constants';
 import superagent from 'superagent'
+import ScoreboardContainer from "./ScoreboardContainer";
 
 class BoardContainer extends Component {
   state = { gameStarted: false, guess: "" };
@@ -62,6 +63,7 @@ class BoardContainer extends Component {
 
     return (
       <div>
+        <ScoreboardContainer users={users}/>
         <Board />
         <div className="gameControls">
           {list}

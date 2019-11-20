@@ -15,10 +15,9 @@ class App extends Component {
   componentDidMount(){
     this.stream.onmessage = (event) => {
       const { data } = event;
-      //console.log(event);
-    //Convert serialize string to JSON string
+      //Convert serialize string to JSON string
       const parsed = JSON.parse(data);
-console.log('parsed', parsed)
+      console.log('parsed', parsed)
       this.props.dispatch(parsed); 
     }
   }
