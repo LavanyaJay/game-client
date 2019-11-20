@@ -1,7 +1,7 @@
 export default function(state = [], action = {}) {
   switch (action.type) {
-    case "CREATE_LOBBY":
-      return action.lobby;
+    case "BOARD_FETCHED":
+      return action.board;
     default:
       return state;
   }

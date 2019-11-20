@@ -1,10 +1,10 @@
 import { combineReducers } from "redux";
-import lobby from "./lobby";
+import board from "./board";
 import user from "./user";
-import rooms from './rooms';
+import rooms from "./rooms";
 
 export default combineReducers({
   user,
-  lobby,
+  board,
   rooms
 });

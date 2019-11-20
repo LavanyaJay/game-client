@@ -1,5 +1,5 @@
 import request from "superagent";
-import {url} from '../constants';
+import { url } from "../constants";
 
 export const login = (username, userpw) => dispatch => {
   const data = { username: username, password: userpw };
@@ -48,7 +48,7 @@ export const joinGame = roomId => (dispatch, getState) => {
   const data = { userId: userId, roomId: roomId };
   request
     .patch(`${url}/join`)
-    .set('Authorization', `Bearer ${jwt}`)
+    .set("Authorization", `Bearer ${jwt}`)
     .send(data)
     .then(response => {
       console.log("inresponse", response.body);
@@ -58,22 +58,41 @@ export const joinGame = roomId => (dispatch, getState) => {
     });
 };
 
-//Starting game 
-export const startGame = roomId => async (dispatch) => {
+//Starting game
+export const startGame = roomId => async dispatch => {
   //Picking random letter
   const char = randomLetter();
   const index = Math.floor(Math.random() * 100);
   //Fetching list of words
-  const data = await request.get(`https://api.datamuse.com/words?sp=${char}?????`)
+  const data = await request.get(
+    `https://api.datamuse.com/words?sp=${char}?????`
+  );
   //Picking random word
   const word = data.body[index].word.toUpperCase();
-  console.log('WORD IS ', word);
+  console.log("WORD IS ", word);
   //Putting wordToGuess to board
-  const response = await request.put(`${url}/board/${roomId}`).send({wordToGuess: word, guesses:''})
-}
+  const response = await request
+    .put(`${url}/board/${roomId}`)
+    .send({ wordToGuess: word, guesses: "" });
+  //Fetching board from the db
+  const board = await request
+    .get(`${url}/${roomId}/board`)
+    .then(response => {
+      console.log("in get board", response.body);
+      dispatch(fetchBoard(response.body));
+    })
+    .catch(res => {
+      console.log("error", res);
+    });
+};
+export const BOARD_FETCHED = "BOARD_FETCHED";
+const fetchBoard = board => ({
+  type: BOARD_FETCHED,
+  board
+});
 
 function randomLetter() {
-	const chars = "abcdefghiklmnopqrstuvwxyz";
-	const randLetter = chars[Math.floor(Math.random() * chars.length)];
-  return randLetter ;
+  const chars = "abcdefghiklmnopqrstuvwxyz";
+  const randLetter = chars[Math.floor(Math.random() * chars.length)];
+  return randLetter;
 }
