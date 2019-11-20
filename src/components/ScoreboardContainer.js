@@ -2,14 +2,19 @@ import React, { Component } from 'react';
 import Scoreboard from './Scoreboard';
 
 class ScoreboardContainer extends Component {
+    
+    has2Players = this.props.users.length === 2;     
+    player1 = this.props.users[0] || null;
+    player2 = this.props.users[1] || null;
+    
     render() {
-        const player1 = this.props.users[0];
-        const player2 = this.props.users[1];
-        console.log('PLAYERS :', player1, player2)
+        console.log('HAS 2 PLAYERS', this.player1, this.player2)
         return (
             <div>
-                <Scoreboard player1={player1} player2={player2}/>
+            {this.has2Players ? <Scoreboard player1={this.player1} player2={this.player2}/> : <p><em>Waiting for players to join...</em></p>}
+            {this.player1 ? <p>1/2 players online : {this.player1.username}</p> : null}
             </div>
+            
         );
     }
 }
