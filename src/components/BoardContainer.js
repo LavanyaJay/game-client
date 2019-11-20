@@ -1,12 +1,16 @@
 import React, { Component } from "react";
 import Board from "./Board.js";
 import { connect } from "react-redux";
-import { joinGame } from "../actions/login";
+import { joinGame, startGame } from "../actions/login";
 import {url} from '../constants';
 import superagent from 'superagent'
 
 class BoardContainer extends Component {
   state = { gameStarted: false, guess: "" };
+
+  componentDidMount() {
+
+  }
 
   onChange = event => {
     const { value } = event.target;
@@ -17,7 +21,7 @@ class BoardContainer extends Component {
     // Submit word guess
   };
 
-  startGame = async () => {
+  joinGame = async () => {
     const { jwt } = this.props;
     const name = this.props.name;
     const joinUrl = `${url}/join/${name}`;
@@ -27,18 +31,29 @@ class BoardContainer extends Component {
     
   };
 
+  startGame = (roomId) => {
+    console.log('DOES IT GET AN ID ?', roomId);
+    this.props.startGame(roomId);
+  }
   render() {
 
     const name = this.props.name;
+    console.log('PROPS from boardcontainer', this.props);
     const { rooms} = this.props;
     const room = rooms.find(room => room.name === name);
 
     if (!room) { return 'This room does not exist' }
+    else {
+      console.log('hello from the else')
+      const roomId = room.id
+      console.log('ROOM ID', roomId)
+    }
     console.log('FOUND ROOM', room)
 
     const { users } = room;
+    const { id } = room;
 
-    console.log('FOUND USERS', users)
+    console.log('FOUND USERS AND ID ', users, id)
     const list = users && users.length ? 
         users.map(user=> {
         return <p key={user.username}>{user.username}</p>
@@ -52,7 +67,7 @@ class BoardContainer extends Component {
           {list}
           {/* Display 'Start game' button, or guess input field */}
           {!this.state.gameStarted ? (
-            <button onClick={this.startGame}>Join game</button>
+            <button onClick={this.joinGame}>Join game</button>
           ) : (
             <form onSubmit={this.onSubmit}>
               <input
@@ -63,6 +78,7 @@ class BoardContainer extends Component {
               <button>Submit</button>
             </form>
           )}
+          <button onClick={()=>this.startGame(id)}>Start game</button>
         </div>
       </div>
     );
@@ -75,4 +91,4 @@ function mapStateToProps(state) {
   }
 }
 
-export default connect(mapStateToProps, { joinGame })(BoardContainer);
+export default connect(mapStateToProps, { joinGame, startGame })(BoardContainer);
