@@ -59,17 +59,17 @@ class BoardContainer extends Component {
         users.map(user=> {
         return <p key={user.username}>{user.username}</p>
       })
-    : <p>'This room has no users'</p>;
+    : <p>This room has no users</p>;
 
     return (
       <div>
         <ScoreboardContainer users={users}/>
         <Board />
+        {list}
         <div className="gameControls">
-          {list}
           {/* Display 'Start game' button, or guess input field */}
           {!this.state.gameStarted ? (
-            <button onClick={this.joinGame}>Join game</button>
+            <button onClick={this.joinGame} className="gameBtn">Join game</button>
           ) : (
             <form onSubmit={this.onSubmit}>
               <input
@@ -80,7 +80,7 @@ class BoardContainer extends Component {
               <button>Submit</button>
             </form>
           )}
-          <button onClick={()=>this.startGame(id)}>Start game</button>
+          <button onClick={()=>this.startGame(id)} className="gameBtn">Start game</button>
         </div>
       </div>
     );
