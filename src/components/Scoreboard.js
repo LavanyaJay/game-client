@@ -3,8 +3,8 @@ import React from 'react';
 const Scoreboard = (props) => {
     return (
         <div>
-            <p>Score Player 1 : {props.scorePlayer1}</p>
-            <p>Score Player 2 : {props.scorePlayer2}</p>
+            <p>Score {props.player1.username} : {props.player1.points} </p>
+            <p>Score {props.player2.username} : {props.player2.points} </p>
         </div>
     );
 };

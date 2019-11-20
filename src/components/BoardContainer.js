@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import Board from "./Board.js";
 import { connect } from "react-redux";
 import { joinGame, startGame } from "../actions/login";
-import { url } from "../constants";
-import superagent from "superagent";
+import {url} from '../constants';
+import superagent from 'superagent'
+import ScoreboardContainer from "./ScoreboardContainer";
 
 class BoardContainer extends Component {
   state = { gameStarted: false, guess: "" };
@@ -63,11 +64,11 @@ class BoardContainer extends Component {
     return (
       <div>
         <Board board={this.props.board} />
+        {list}
         <div className="gameControls">
-          {list}
           {/* Display 'Start game' button, or guess input field */}
           {!this.state.gameStarted ? (
-            <button onClick={this.joinGame}>Join game</button>
+            <button onClick={this.joinGame} className="gameBtn">Join game</button>
           ) : (
             <form onSubmit={this.onSubmit}>
               <input
@@ -78,7 +79,7 @@ class BoardContainer extends Component {
               <button>Submit</button>
             </form>
           )}
-          <button onClick={() => this.startGame(id)}>Start game</button>
+          <button onClick={()=>this.startGame(id)} className="gameBtn">Start game</button>
         </div>
       </div>
     );

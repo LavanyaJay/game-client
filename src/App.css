@@ -1,3 +1,13 @@
+body * {
+  font-family: 'Dosis';
+  background-color: #FFCCB3;
+}
+
+input {
+  background-color: white;
+  border-radius: 10%;
+}
+
 .App {
   text-align: center;
 }
@@ -61,4 +71,22 @@
 .yellowSqr {
   background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvktTbSbjN4n8ZGAsSMl61zud8YsfxkzkbUq2Cg4YbNKm9dyJH&s");
   background-size: 80px 80px;
+}
+
+.gameControls {
+  display: flex;
+  justify-content: center;
+}
+
+.gameBtn {
+  width: 150px;
+  height: 80px;
+  color: white;
+  font-size: 1.5em;
+  font-weight: 600;
+  margin: 10px;
+}
+.gameBtn:hover {
+  background-color: white;
+  color: #FFCCB3;
 }
