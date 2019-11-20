@@ -17,17 +17,16 @@ class Lobby extends Component {
     this.setState({ value });
   };
 
-  onSubmit = event => {
+  onSubmit = async event => {
     event.preventDefault();
     const value = this.state.value;
 
     const postUrl = `${url}/room`;
-    superagent
+    const newRoomId = await superagent
       .post(postUrl)
       .send({ name: value })
-      .then(res => {
-        console.log("testing response: ", res);
-      });
+      .then(res => res.body.id);
+    const response = await superagent.post(`${url}/${newRoomId}/board`);
   };
 
   render() {

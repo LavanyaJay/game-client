@@ -57,3 +57,23 @@ export const joinGame = roomId => (dispatch, getState) => {
       console.log("error", res);
     });
 };
+
+//Starting game 
+export const startGame = roomId => async (dispatch) => {
+  //Picking random letter
+  const char = randomLetter();
+  const index = Math.floor(Math.random() * 100);
+  //Fetching list of words
+  const data = await request.get(`https://api.datamuse.com/words?sp=${char}?????`)
+  //Picking random word
+  const word = data.body[index].word.toUpperCase();
+  console.log('WORD IS ', word);
+  //Putting wordToGuess to board
+  const response = await request.put(`${url}/board/${roomId}`).send({wordToGuess: word, guesses:''})
+}
+
+function randomLetter() {
+	const chars = "abcdefghiklmnopqrstuvwxyz";
+	const randLetter = chars[Math.floor(Math.random() * chars.length)];
+  return randLetter ;
+}
