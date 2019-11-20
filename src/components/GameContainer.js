@@ -1,9 +1,16 @@
 import React, { Component } from "react";
 import BoardContainer from "./BoardContainer";
-import { connect } from 'react-redux'
+import { loadBoard } from "../actions/board";
+import { connect } from "react-redux";
 
 class GameContainer extends Component {
+  /* componentDidMount() {
+    const roomName = this.props.match.params.name;
+    console.log("did Mount");
+    console.log(roomName);
 
+    this.props.loadBoard(roomName);
+  } */
   render() {
     const roomId = this.props.match.params.roomId;
     return (
@@ -13,5 +20,10 @@ class GameContainer extends Component {
     );
   }
 }
+/* function mapStateToProps(state) {
+  return {
+    board: state.board
+  };
+} */
 
-export default connect()(GameContainer);
+export default connect(null, {})(GameContainer);

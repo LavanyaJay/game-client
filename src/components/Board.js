@@ -1,19 +1,69 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
+import { loadBoard, updateBoard } from "../actions/board";
+import { connect } from "react-redux";
 import "../App.css";
 
-export default class Game extends Component {
+class Board extends Component {
+  state = { guess: "", actuals: [] };
+  onSubmit = event => {
+    event.preventDefault();
+    const x = this.state.guess.split("");
+    console.log("x: ", x);
+    const y = this.state.actuals.concat(x);
+    this.setState({ actuals: y });
+  };
+
+  onChange = event => {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  };
   render() {
-    let targetWord = "ROTARY";
-    let targetWordLen = targetWord.length;
+    let targetWord;
+    let targetWordLen;
+    console.log("in board:", this.props.board);
+    //Get expected word from DB
+    console.log(this.props.board.wordToGuess);
+    this.props.wordToGuess !== null
+      ? (targetWord = this.props.board.wordToGuess)
+      : (targetWord = "");
+
+    if (targetWord === undefined) {
+      targetWordLen = 0;
+    } else {
+      console.log(targetWord);
+      targetWordLen = targetWord.length;
+    }
+
+    //Set the expectedGrid Array
     let expectedGrid = "";
-    let inputWord = "RADAR";
     for (let i = 0; i < targetWordLen; i++) {
       expectedGrid += targetWord;
     }
-    console.log(expectedGrid);
     expectedGrid = Array.from(expectedGrid);
-    let actualGrid = Array.from("REACTYRETARYROTARY");
+    console.log(expectedGrid);
+
+    //Get the actual grid from DB (convert the string to array)
+    console.log(this.state.actuals);
+    const fetchactualGrid = () => {
+      console.log("tergetword", targetWord);
+      if (this.state.actuals.length === 0 && targetWord !== undefined) {
+        const firstWord = targetWord.slice(0, 1);
+        let actualGrid = Array.from(firstWord);
+        return actualGrid;
+      }
+      console.log("Actuals:", this.state.actuals);
+      let actualGrid = this.state.actuals;
+
+      return actualGrid;
+    };
+    //First time the actual Grid is empty
+    //if (actualGrid.length === 0) ? populate the first letter from the expected word : use the actualgrid with guesses
+    let actualGrid = fetchactualGrid();
+    console.log(actualGrid);
+    //let actualGrid = Array.from("REACTY");
+
     let gridState = [];
     let objMap = {};
 
@@ -40,8 +90,8 @@ export default class Game extends Component {
         }
         objMap[actualGrid[i]] -= 1; //
       }
-      console.log(gridState[i]);
     } //outermost for
+    console.log(gridState);
 
     let rows = [];
     for (let i = 0; i < targetWordLen; i++) {
@@ -78,84 +128,31 @@ export default class Game extends Component {
           {cell}
         </tr>
       );
-      //Push to DB and stream
     }
-    /* let rows = [];
-    for (let i = 0; i < 6; i++) {
-      let rowID = `row${i}`;
-      let cell = [];
-      for (var idx = 0; idx < 6; idx++) {
-        let cellID = `cell${i}-${idx}`;
-        cell.push(
-          <td className="box blueSqr" key={cellID} id={cellID}>
-            {inputWord[idx]}
-          </td>
-        );
-      }
-      rows.push(
-        <tr key={i} id={rowID} className="box">
-          {cell}
-        </tr>
-      );
-    } */
+    //Push to DB and stream
+    /* const boardId = 1;
+
+    const guessesGrid = actualGrid.join("");
+    console.log("String: ", guessesGrid);
+    updateBoard(boardId, guessesGrid);
+ */
     return (
       <div>
         <Table bordered className="game-board">
           <tbody>{rows}</tbody>
         </Table>
+        <form onSubmit={event => this.onSubmit(event)}>
+          <label>Enter your guess:</label>
+          <input
+            name="guess"
+            onChange={this.onChange}
+            value={this.state.guess}
+          />
+          <input type="submit" value="Submit" />
+        </form>
       </div>
-      /*    <Table bordered className="game-board">
-        <tbody>
-          <tr className="box">
-            <td className="redSqr">B</td>
-            <td className="blueSqr"> O</td>
-            <td className="blueSqr">R</td>
-            <td className="blueSqr">D</td>
-            <td className="yellowSqr">E</td>
-            <td className="blueSqr">R</td>
-          </tr>
-          <tr className="box blueSqr">
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr className="box blueSqr">
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr className="box blueSqr">
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr className="box blueSqr">
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr>
-            <td className="box blueSqr">d</td>
-            <td className="box blueSqr"></td>
-            <td className="box blueSqr"></td>
-            <td className="box blueSqr"></td>
-            <td className="box blueSqr"></td>
-            <td className="box blueSqr"></td>
-          </tr>
-        </tbody>
-      </Table> */
     );
   }
 }
+
+export default connect()(Board);
