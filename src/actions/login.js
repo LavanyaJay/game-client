@@ -59,7 +59,7 @@ export const joinGame = roomId => (dispatch, getState) => {
 };
 
 //Starting game
-export const startGame = roomId => async dispatch => {
+export const startGame = (roomId, userId) => async dispatch => {
   //Picking random letter
   const char = randomLetter();
   const index = Math.floor(Math.random() * 100);
@@ -75,15 +75,16 @@ export const startGame = roomId => async dispatch => {
     .put(`${url}/board/${roomId}`)
     .send({ wordToGuess: word, guesses: "" });
   //Fetching board from the db
-  const board = await request
-    .get(`${url}/${roomId}/board`)
-    .then(response => {
-      console.log("in get board", response.body);
-      dispatch(fetchBoard(response.body));
+  const board = await request.get(`${url}/${roomId}/board`).then(response => {
+    dispatch(fetchBoard(response.body));
+  });
+  const player = await request
+    .put(`${url}/board/${roomId}`)
+    .send({
+      currentPlayer: userId,
+      gameOn: true
     })
-    .catch(res => {
-      console.log("error", res);
-    });
+    .then(response => {});
 };
 export const BOARD_FETCHED = "BOARD_FETCHED";
 const fetchBoard = board => ({

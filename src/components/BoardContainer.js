@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { joinGame, startGame } from "../actions/login";
 import { url } from "../constants";
 import superagent from "superagent";
-import { updateBoard } from "../actions/board";
+import { updateBoard, updatePlayer } from "../actions/board";
 import ScoreboardContainer from "./ScoreboardContainer";
 
 class BoardContainer extends Component {
@@ -39,8 +39,9 @@ class BoardContainer extends Component {
   };
 
   onChange = event => {
+    const message = event.target.value.slice(0, 6);
     this.setState({
-      [event.target.name]: event.target.value.toUpperCase()
+      [event.target.name]: message.toUpperCase()
     });
   };
 
@@ -53,11 +54,11 @@ class BoardContainer extends Component {
       .set({ authorization: `Bearer ${jwt}` });
   };
 
-  startGame = roomId => {
+
+  startGame = (roomId, userId) => {
+    this.props.startGame(roomId, userId);
     this.setState({ allGuesses: "" });
 
-    console.log("DOES IT GET AN ID ?", roomId);
-    this.props.startGame(roomId);
   };
   fetchBoard = id => {
     const room = this.props.rooms.find(room => room.id === id);
@@ -76,6 +77,13 @@ class BoardContainer extends Component {
       const roomId = room.id;
     }
     console.log("FOUND ROOM", room);
+
+    //Fetch User id
+    if (!this.props.user) {
+      return "User does not exist";
+    } else {
+      var userId = this.props.user.userId;
+    }
 
     const { users } = room;
     const { id } = room;
@@ -122,7 +130,7 @@ class BoardContainer extends Component {
             </button>
           /* Are there two players in the room ? If so, display 'Start game */
           ) : has2Players ?
-            <button onClick={() => this.startGame(id)} className="gameBtn">
+            <button onClick={() => this.startGame(id,userId)} className="gameBtn">
               Start game
             </button>
             :
@@ -136,9 +144,13 @@ class BoardContainer extends Component {
                 name="currentGuess"
                 onChange={this.onChange}
                 value={this.state.currentGuess}
+                maxLength="6"
               ></input>
               <button>Submit</button>
-            </form> */}
+
+            </form>
+       */}
+         
 
         </div>
       </div>
@@ -152,10 +164,14 @@ function mapStateToProps(state) {
     jwt: state.user.jwt,
     userId: state.user.userId,
     rooms: state.rooms,
-    board: state.board
+    board: state.board,
+    user: state.user
   };
 }
 
-export default connect(mapStateToProps, { joinGame, startGame, updateBoard })(
-  BoardContainer
-);
+export default connect(mapStateToProps, {
+  joinGame,
+  startGame,
+  updateBoard,
+  updatePlayer
+})(BoardContainer);
