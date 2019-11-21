@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { joinGame, startGame } from "../actions/login";
 import { url } from "../constants";
 import superagent from "superagent";
-import { updateBoard } from "../actions/board";
+import { updateBoard, updatePlayer } from "../actions/board";
 import ScoreboardContainer from "./ScoreboardContainer";
 
 class BoardContainer extends Component {
@@ -55,11 +55,9 @@ class BoardContainer extends Component {
       .set({ authorization: `Bearer ${jwt}` });
   };
 
-  startGame = roomId => {
-    this.setState({ gameStarted: true, allGuesses: "" });
-
-    console.log("DOES IT GET AN ID ?", roomId);
-    this.props.startGame(roomId);
+  startGame = (roomId, userId) => {
+    this.props.startGame(roomId, userId);
+    this.setState({ allGuesses: "" });
   };
   fetchBoard = id => {
     const room = this.props.rooms.find(room => room.id === id);
@@ -80,6 +78,13 @@ class BoardContainer extends Component {
       console.log("ROOM ID", roomId);
     }
     console.log("FOUND ROOM", room);
+
+    //Fetch User id
+    if (!this.props.user) {
+      return "User does not exist";
+    } else {
+      var userId = this.props.user.userId;
+    }
 
     const { users } = room;
     const { id } = room;
@@ -127,7 +132,10 @@ class BoardContainer extends Component {
               <button>Submit</button>
             </form>
           )}
-          <button onClick={() => this.startGame(id)} className="gameBtn">
+          <button
+            onClick={() => this.startGame(id, userId)}
+            className="gameBtn"
+          >
             Start game
           </button>
         </div>
@@ -141,10 +149,14 @@ function mapStateToProps(state) {
   return {
     jwt: state.user.jwt,
     rooms: state.rooms,
-    board: state.board
+    board: state.board,
+    user: state.user
   };
 }
 
-export default connect(mapStateToProps, { joinGame, startGame, updateBoard })(
-  BoardContainer
-);
+export default connect(mapStateToProps, {
+  joinGame,
+  startGame,
+  updateBoard,
+  updatePlayer
+})(BoardContainer);

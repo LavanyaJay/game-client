@@ -56,15 +56,25 @@ export const updateBoard = (name, guesses) => (dispatch, getState) => {
 };
 
 const updateGuess = (id, guesses, dispatch) => {
-  console.log("for board update");
   request
     .put(`${url}/board/${id}`)
     .send({
       guesses: guesses
     })
     .then(response => {
-      console.log("updated board: ", response.body);
       dispatch(boardUpdate(response.body));
+    })
+    .catch(console.error);
+};
+
+export const updatePlayer = userId => {
+  request
+    .put(`${url}/board/${userId}`)
+    .send({
+      currentPlayer: userId
+    })
+    .then(response => {
+      console.log("updated player: ", response.body);
     })
     .catch(console.error);
 };

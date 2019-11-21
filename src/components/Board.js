@@ -17,7 +17,7 @@ class Board extends Component {
       for (let i = 0; i < 6; i++) {
         let rowID = `row${i}`;
         let cell = [];
-        for (var idx = 0; idx < 6; idx++) {
+        for (let idx = 0; idx < 6; idx++) {
           let cellID = `cell${i}-${idx}`;
           //let finalIndex = i * targetWordLen + idx;
 
@@ -57,8 +57,6 @@ class Board extends Component {
       expectedGrid += targetWord;
     }
     expectedGrid = Array.from(expectedGrid);
-
-    console.log(expectedGrid);
 
     //Get the actual grid from DB (convert the string to array)
 
@@ -107,13 +105,12 @@ class Board extends Component {
         objMap[actualGrid[i]] -= 1; //
       }
     } //outermost for
-    console.log(gridState);
 
     let rows = [];
     for (let i = 0; i < targetWordLen; i++) {
       let rowID = `row${i}`;
       let cell = [];
-      for (var idx = 0; idx < 6; idx++) {
+      for (let idx = 0; idx < 6; idx++) {
         let cellID = `cell${i}-${idx}`;
         let finalIndex = i * targetWordLen + idx;
         if (gridState[finalIndex] === -1) {
@@ -152,15 +149,7 @@ class Board extends Component {
         <Table bordered className="game-board">
           <tbody>{rows}</tbody>
         </Table>
-        {/*  <form onSubmit={event => this.onSubmit(event)}>
-          <label>Enter your guesses:</label>
-          <input
-            name="currentGuess"
-            onChange={this.onChange}
-            value={this.state.guess}
-          />
-          <input type="submit" value="Submit" />
-        </form> */}
+
         {this.props.showPopup ? (
           <Popup
             text="Congrats! You Win!!"
