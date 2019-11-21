@@ -1,22 +1,32 @@
 import React, { Component } from 'react';
 import Scoreboard from './Scoreboard';
+import { connect } from "react-redux";
 
 class ScoreboardContainer extends Component {
-    
-    has2Players = this.props.users.length === 2;     
-    player1 = this.props.users[0] || null;
-    player2 = this.props.users[1] || null;
-    
     render() {
-        console.log('HAS 2 PLAYERS', this.player1, this.player2)
+
+        const room = this.props.rooms.find(room=>room.id === this.props.roomId)
+        const { users } = room;
+        const userIds = users.map(user=>user.id);
+        const has2Players = users.length === 2;     
+        const player1 = users.find(user=> user.id === userIds[0]) || null;
+        const player2 = users.find(user=> user.id === userIds[1]) || null;
         return (
-            <div>
-            {this.has2Players ? <Scoreboard player1={this.player1} player2={this.player2}/> : <p><em>Waiting for players to join...</em></p>}
-            {this.player1 ? <p>1/2 players online : {this.player1.username}</p> : null}
-            </div>
-            
+                <div>
+                    {has2Players ? <Scoreboard player1={player1} player2={player2}/> : <p><em>Waiting for players to join...</em></p>}
+                    {player1 ? <p>1/2 players online : {player1.username}</p> : null}
+                </div>
         );
     }
 }
 
-export default ScoreboardContainer;
+function mapStateToProps(state) {
+    return {
+      rooms: state.rooms,
+    };
+  }
+  
+  export default connect(mapStateToProps)(
+    ScoreboardContainer
+  );
+  
