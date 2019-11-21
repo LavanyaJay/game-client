@@ -54,12 +54,9 @@ class BoardContainer extends Component {
       .set({ authorization: `Bearer ${jwt}` });
   };
 
-
   startGame = (roomId, userId) => {
     this.props.startGame(roomId, userId);
     this.setState({ allGuesses: "" });
-
-  
   };
   fetchBoard = id => {
     const room = this.props.rooms.find(room => room.id === id);
@@ -79,13 +76,6 @@ class BoardContainer extends Component {
     }
     console.log("FOUND ROOM", room);
 
-    //Fetch User id
-    if (!this.props.user) {
-      return "User does not exist";
-    } else {
-      var userId = this.props.user.userId;
-    }
-
     const { users } = room;
     const { id } = room;
 
@@ -101,12 +91,33 @@ class BoardContainer extends Component {
 
     const board = this.fetchBoard(id);
 
-    const roomUsersIds = users.map(user=>user.id);
-    console.log('USER IDS IN THIS ROOM', roomUsersIds, this.props.userId)
-    const isUserInRoom = roomUsersIds.includes(this.props.userId)
-    console.log('AM I JOINED IN THIS ROOM ?', isUserInRoom);
+    const roomUsersIds = users.map(user => user.id);
+    console.log("USER IDS IN THIS ROOM", roomUsersIds, this.props.userId);
+    const isUserInRoom = roomUsersIds.includes(this.props.userId);
     const has2Players = users.length === 2;
-    console.log('DOES THIS ROOM HAVE 2 PLAYERS?', has2Players)
+    const currentBoard = this.props.rooms.find(room => room.id === id).board;
+    const isGameOn = currentBoard.gameOn;
+    const currentPlayer = currentBoard.currentPlayer;
+    const isItMyTurn = currentPlayer === this.props.userId;;
+
+    console.log("BOARD IS HERE ", currentPlayer);
+
+    const userContent = this.props.user ? (
+      !isUserInRoom ? (
+        <button onClick={this.joinGame}>
+          Join game
+        </button>
+      ) : has2Players /* Are there two players in the room ? If so, display ’Start game */ ? (
+        <button
+          onClick={() => this.startGame(id, this.props.user.userId)}
+          
+        >
+          Start game
+        </button>
+      ) : (
+        <p>Waiting for another player to join...</p>
+      ) /* Only one player in the room ? Display ‘waiting for another player’ */
+    ) : null;
 
     return (
       <div>
@@ -121,25 +132,13 @@ class BoardContainer extends Component {
         />
         {list}
         <div className="gameControls">
-
+          <userContent/>
           {/* Display 'Start game' button, or guess input field */}
 
           {/* PUT ALL LOGIC BELOW IN 'IF gameOn === false */}
-          {/* If user not in room : display 'Join game' */}
-          {!isUserInRoom ? (
 
-            <button onClick={this.joinGame} className="gameBtn">
-              Join game
-            </button>
-          /* Are there two players in the room ? If so, display 'Start game */
-          ) : has2Players ?
-            <button onClick={() => this.startGame(id,userId)} className="gameBtn">
-              Start game
-            </button>
-            :
-          /* Only one player in the room ? Display 'waiting for another player' */
-            <p>Waiting for another player to join...</p>
-          }
+          {/* If user not in room : display 'Join game' */}
+          {}
           {/* IF gameON === TRUE, SHOW INPUT FIELD */}
           {/* <form onSubmit={this.onSubmit}>
               <input
@@ -152,8 +151,6 @@ class BoardContainer extends Component {
               <button>Submit</button>
 
             </form> */}
-
-
         </div>
       </div>
     );
