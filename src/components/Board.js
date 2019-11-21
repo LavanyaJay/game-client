@@ -1,30 +1,49 @@
 import React, { Component } from "react";
 import { Table } from "react-bootstrap";
-import { loadBoard, updateBoard } from "../actions/board";
+import { updateBoard } from "../actions/board";
 import { connect } from "react-redux";
+import Popup from "./Popup";
 import "../App.css";
 
 class Board extends Component {
-  state = { guess: "", actuals: [] };
-  onSubmit = event => {
-    event.preventDefault();
-    const x = this.state.guess.split("");
-    console.log("x: ", x);
-    const y = this.state.actuals.concat(x);
-    this.setState({ actuals: y });
+  resetGuess = () => {
+    this.setState({ allGuesses: "" });
   };
+
+  /* onSubmit = event => {
+    event.preventDefault();
+    const y = this.state.allGuesses + this.state.currentGuess;
+    this.setState({ allGuesses: y });
+    this.props.updateBoard(this.props.name, y);
+    this.validateWinner(this.state.currentGuess);
+  };
+
+  validateWinner = currentGuess => {
+    if (this.state.currentGuess === this.props.board.wordToGuess) {
+      this.togglePopup();
+    }
+  };
+
+  togglePopup() {
+    this.setState({
+      showPopup: !this.state.showPopup
+    });
+  }
 
   onChange = event => {
     this.setState({
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value.toUpperCase()
     });
-  };
+  }; */
   render() {
+    /* if (this.props.gameStarted === true) {
+      this.resetGuess();
+    } */
     let targetWord;
     let targetWordLen;
-    console.log("in board:", this.props.board);
+
     //Get expected word from DB
-    console.log(this.props.board.wordToGuess);
+
     this.props.wordToGuess !== null
       ? (targetWord = this.props.board.wordToGuess)
       : (targetWord = "");
@@ -32,10 +51,11 @@ class Board extends Component {
     if (targetWord === undefined) {
       targetWordLen = 0;
     } else {
-      console.log(targetWord);
       targetWordLen = targetWord.length;
     }
 
+    console.log("currentGuess", this.props.currentGuess);
+    console.log("allGuesses", this.props.allGuesses);
     //Set the expectedGrid Array
     let expectedGrid = "";
     for (let i = 0; i < targetWordLen; i++) {
@@ -45,17 +65,15 @@ class Board extends Component {
     console.log(expectedGrid);
 
     //Get the actual grid from DB (convert the string to array)
-    console.log(this.state.actuals);
+
     const fetchactualGrid = () => {
-      console.log("tergetword", targetWord);
-      if (this.state.actuals.length === 0 && targetWord !== undefined) {
+      if (!this.props.board.guesses && targetWord) {
         const firstWord = targetWord.slice(0, 1);
         let actualGrid = Array.from(firstWord);
+
         return actualGrid;
       }
-      console.log("Actuals:", this.state.actuals);
-      let actualGrid = this.state.actuals;
-
+      let actualGrid = this.props.board.guesses;
       return actualGrid;
     };
     //First time the actual Grid is empty
@@ -129,30 +147,30 @@ class Board extends Component {
         </tr>
       );
     }
-    //Push to DB and stream
-    /* const boardId = 1;
 
-    const guessesGrid = actualGrid.join("");
-    console.log("String: ", guessesGrid);
-    updateBoard(boardId, guessesGrid);
- */
     return (
       <div>
         <Table bordered className="game-board">
           <tbody>{rows}</tbody>
         </Table>
-        <form onSubmit={event => this.onSubmit(event)}>
-          <label>Enter your guess:</label>
+        {/*  <form onSubmit={event => this.onSubmit(event)}>
+          <label>Enter your guesses:</label>
           <input
-            name="guess"
+            name="currentGuess"
             onChange={this.onChange}
             value={this.state.guess}
           />
           <input type="submit" value="Submit" />
-        </form>
+        </form> */}
+        {this.props.showPopup ? (
+          <Popup
+            text="Congrats! You Win!!"
+            closePopup={this.props.togglePopup}
+          />
+        ) : null}
       </div>
     );
   }
 }
 
-export default connect()(Board);
+export default connect(null, { updateBoard })(Board);

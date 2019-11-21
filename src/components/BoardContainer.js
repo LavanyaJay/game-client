@@ -2,22 +2,47 @@ import React, { Component } from "react";
 import Board from "./Board.js";
 import { connect } from "react-redux";
 import { joinGame, startGame } from "../actions/login";
-import {url} from '../constants';
-import superagent from 'superagent'
+import { url } from "../constants";
+import superagent from "superagent";
+import { updateBoard } from "../actions/board";
 import ScoreboardContainer from "./ScoreboardContainer";
 
 class BoardContainer extends Component {
-  state = { gameStarted: false, guess: "" };
+  state = {
+    gameStarted: false,
+    guess: "",
+    currentGuess: "",
+    allGuesses: "",
+    showPopup: false
+  };
 
   componentDidMount() {}
 
-  onChange = event => {
-    const { value } = event.target;
-    this.setState({ value });
+  onSubmit = event => {
+    event.preventDefault();
+    const y = this.state.allGuesses + this.state.currentGuess;
+    this.setState({ allGuesses: y });
+    this.props.updateBoard(this.props.name, y);
+    this.validateWinner(this.state.currentGuess);
+    this.setState({ currentGuess: "" });
   };
 
-  onSubmit = event => {
-    // Submit word guess
+  validateWinner = currentGuess => {
+    if (this.state.currentGuess === this.props.board.wordToGuess) {
+      this.togglePopup();
+    }
+  };
+
+  togglePopup = () => {
+    this.setState({
+      showPopup: !this.state.showPopup
+    });
+  };
+
+  onChange = event => {
+    this.setState({
+      [event.target.name]: event.target.value.toUpperCase()
+    });
   };
 
   joinGame = async () => {
@@ -30,6 +55,8 @@ class BoardContainer extends Component {
   };
 
   startGame = roomId => {
+    this.setState({ gameStarted: true, allGuesses: "" });
+
     console.log("DOES IT GET AN ID ?", roomId);
     this.props.startGame(roomId);
   };
@@ -63,23 +90,36 @@ class BoardContainer extends Component {
 
     return (
       <div>
-        <Board board={this.props.board} />
+        <Board
+          board={this.props.board}
+          name={this.props.name}
+          gameStarted={this.state.gameStarted}
+          currentGuess={this.state.currentGuess}
+          allGuesses={this.state.allGuesses}
+          togglePopup={this.togglePopup}
+          showPopup={this.state.showPopup}
+        />
         {list}
         <div className="gameControls">
           {/* Display 'Start game' button, or guess input field */}
           {!this.state.gameStarted ? (
-            <button onClick={this.joinGame} className="gameBtn">Join game</button>
+            <button onClick={this.joinGame} className="gameBtn">
+              Join game
+            </button>
           ) : (
             <form onSubmit={this.onSubmit}>
               <input
                 type="text"
+                name="currentGuess"
                 onChange={this.onChange}
-                value={this.state.value}
+                value={this.state.currentGuess}
               ></input>
               <button>Submit</button>
             </form>
           )}
-          <button onClick={()=>this.startGame(id)} className="gameBtn">Start game</button>
+          <button onClick={() => this.startGame(id)} className="gameBtn">
+            Start game
+          </button>
         </div>
       </div>
     );
@@ -95,6 +135,6 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { joinGame, startGame })(
+export default connect(mapStateToProps, { joinGame, startGame, updateBoard })(
   BoardContainer
 );

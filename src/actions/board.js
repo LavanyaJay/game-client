@@ -33,17 +33,38 @@ export const loadBoard = roomName => (dispatch, getState) => {
       });
   };
 };
-
+export const BOARD_UPDATE = "BOARD_UPDATE";
+const boardUpdate = board => ({
+  type: BOARD_UPDATE,
+  board
+});
 //Update Board
-export const updateBoard = (id, guesses) => (dispatch, getState) => {
-  const data = { id, guesses };
-  request
-    .patch(`${url}/board`)
-    .send(data)
+export const updateBoard = (name, guesses) => (dispatch, getState) => {
+  console.log("in action for update huess");
+  const user = request
+    .get(`${url}/room/${name}`)
     .then(response => {
-      console.log("inresponse", response.body);
+      console.log("in get board", response.body);
+      const id = response.body.id;
+      updateGuess(id, guesses, dispatch);
     })
     .catch(res => {
       console.log("error", res);
     });
+
+  //Fetching board from the db
+};
+
+const updateGuess = (id, guesses, dispatch) => {
+  console.log("for board update");
+  request
+    .put(`${url}/board/${id}`)
+    .send({
+      guesses: guesses
+    })
+    .then(response => {
+      console.log("updated board: ", response.body);
+      dispatch(boardUpdate(response.body));
+    })
+    .catch(console.error);
 };
