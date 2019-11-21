@@ -9,7 +9,6 @@ import ScoreboardContainer from "./ScoreboardContainer";
 
 class BoardContainer extends Component {
   state = {
-    gameStarted: false,
     guess: "",
     currentGuess: "",
     allGuesses: "",
@@ -55,7 +54,7 @@ class BoardContainer extends Component {
   };
 
   startGame = roomId => {
-    this.setState({ gameStarted: true, allGuesses: "" });
+    this.setState({ allGuesses: "" });
 
     console.log("DOES IT GET AN ID ?", roomId);
     this.props.startGame(roomId);
@@ -74,9 +73,7 @@ class BoardContainer extends Component {
     if (!room) {
       return "This room does not exist";
     } else {
-      console.log("hello from the else");
       const roomId = room.id;
-      console.log("ROOM ID", roomId);
     }
     console.log("FOUND ROOM", room);
 
@@ -95,12 +92,18 @@ class BoardContainer extends Component {
 
     const board = this.fetchBoard(id);
 
+    const roomUsersIds = users.map(user=>user.id);
+    console.log('USER IDS IN THIS ROOM', roomUsersIds, this.props.userId)
+    const isUserInRoom = roomUsersIds.includes(this.props.userId)
+    console.log('AM I JOINED IN THIS ROOM ?', isUserInRoom);
+    const has2Players = users.length === 2;
+    console.log('DOES THIS ROOM HAVE 2 PLAYERS?', has2Players)
+
     return (
       <div>
         <Board
           board={board}
           name={this.props.name}
-          gameStarted={this.state.gameStarted}
           currentGuess={this.state.currentGuess}
           allGuesses={this.state.allGuesses}
           togglePopup={this.togglePopup}
@@ -110,12 +113,24 @@ class BoardContainer extends Component {
         {list}
         <div className="gameControls">
           {/* Display 'Start game' button, or guess input field */}
-          {!this.state.gameStarted ? (
+
+          {/* PUT ALL LOGIC BELOW IN 'IF gameOn === false */}
+          {/* If user not in room : display 'Join game' */}
+          {!isUserInRoom ? (
             <button onClick={this.joinGame} className="gameBtn">
               Join game
             </button>
-          ) : (
-            <form onSubmit={this.onSubmit}>
+          /* Are there two players in the room ? If so, display 'Start game */
+          ) : has2Players ?
+            <button onClick={() => this.startGame(id)} className="gameBtn">
+              Start game
+            </button>
+            :
+          /* Only one player in the room ? Display 'waiting for another player' */
+            <p>Waiting for another player to join...</p>
+          }
+          {/* IF gameON === TRUE, SHOW INPUT FIELD */}
+          {/* <form onSubmit={this.onSubmit}>
               <input
                 type="text"
                 name="currentGuess"
@@ -123,11 +138,8 @@ class BoardContainer extends Component {
                 value={this.state.currentGuess}
               ></input>
               <button>Submit</button>
-            </form>
-          )}
-          <button onClick={() => this.startGame(id)} className="gameBtn">
-            Start game
-          </button>
+            </form> */}
+
         </div>
       </div>
     );
@@ -138,6 +150,7 @@ function mapStateToProps(state) {
   console.log("redux-board", state.board);
   return {
     jwt: state.user.jwt,
+    userId: state.user.userId,
     rooms: state.rooms,
     board: state.board
   };

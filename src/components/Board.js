@@ -31,9 +31,13 @@ class Board extends Component {
         );
       }
       return (
+        <div>
+        <ScoreboardContainer roomId={this.props.roomId} />
+
         <Table bordered className="game-board">
           <tbody>{rows}</tbody>
         </Table>
+        </div>
       );
     }
     let targetWord;

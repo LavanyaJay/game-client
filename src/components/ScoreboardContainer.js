@@ -13,8 +13,12 @@ class ScoreboardContainer extends Component {
         const player2 = users.find(user=> user.id === userIds[1]) || null;
         return (
                 <div>
-                    {has2Players ? <Scoreboard player1={player1} player2={player2}/> : <p><em>Waiting for players to join...</em></p>}
-                    {player1 ? <p>1/2 players online : {player1.username}</p> : null}
+                    {has2Players ? 
+                    <Scoreboard player1={player1} player2={player2}/> 
+                    : 
+                    player1 ? <p>1/2 players joined : {player1.username}</p> 
+                    :
+                    <p><em>Waiting for players to join...</em></p>}
                 </div>
         );
     }
