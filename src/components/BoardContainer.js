@@ -40,8 +40,9 @@ class BoardContainer extends Component {
   };
 
   onChange = event => {
+    const message = event.target.value.slice(0, 6);
     this.setState({
-      [event.target.name]: event.target.value.toUpperCase()
+      [event.target.name]: message.toUpperCase()
     });
   };
 
@@ -121,6 +122,7 @@ class BoardContainer extends Component {
                 name="currentGuess"
                 onChange={this.onChange}
                 value={this.state.currentGuess}
+                maxLength="6"
               ></input>
               <button>Submit</button>
             </form>
