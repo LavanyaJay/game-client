@@ -85,7 +85,7 @@ class BoardContainer extends Component {
           return <p key={user.username}>{user.username}</p>;
         })
       ) : (
-        <p>'This room has no users'</p>
+        <p>This room has no users</p>
       );
 
     return (
@@ -98,6 +98,7 @@ class BoardContainer extends Component {
           allGuesses={this.state.allGuesses}
           togglePopup={this.togglePopup}
           showPopup={this.state.showPopup}
+          roomId={id}
         />
         {list}
         <div className="gameControls">

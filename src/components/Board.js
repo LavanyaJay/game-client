@@ -4,6 +4,7 @@ import { updateBoard } from "../actions/board";
 import { connect } from "react-redux";
 import Popup from "./Popup";
 import "../App.css";
+import ScoreboardContainer from "../components/ScoreboardContainer";
 
 class Board extends Component {
   resetGuess = () => {
@@ -150,6 +151,7 @@ class Board extends Component {
 
     return (
       <div>
+        <ScoreboardContainer roomId={this.props.roomId}/>
         <Table bordered className="game-board">
           <tbody>{rows}</tbody>
         </Table>
