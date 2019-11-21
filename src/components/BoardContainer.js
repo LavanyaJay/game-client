@@ -60,6 +60,11 @@ class BoardContainer extends Component {
     console.log("DOES IT GET AN ID ?", roomId);
     this.props.startGame(roomId);
   };
+  fetchBoard = id => {
+    const room = this.props.rooms.find(room => room.id === id);
+    console.log("this is the board: ", room.board);
+    return room.board;
+  };
   render() {
     const name = this.props.name;
     console.log("PROPS from boardcontainer", this.props);
@@ -88,10 +93,12 @@ class BoardContainer extends Component {
         <p>'This room has no users'</p>
       );
 
+    const board = this.fetchBoard(id);
+
     return (
       <div>
         <Board
-          board={this.props.board}
+          board={board}
           name={this.props.name}
           gameStarted={this.state.gameStarted}
           currentGuess={this.state.currentGuess}

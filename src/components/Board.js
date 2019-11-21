@@ -6,35 +6,6 @@ import Popup from "./Popup";
 import "../App.css";
 
 class Board extends Component {
-  resetGuess = () => {
-    this.setState({ allGuesses: "" });
-  };
-
-  /* onSubmit = event => {
-    event.preventDefault();
-    const y = this.state.allGuesses + this.state.currentGuess;
-    this.setState({ allGuesses: y });
-    this.props.updateBoard(this.props.name, y);
-    this.validateWinner(this.state.currentGuess);
-  };
-
-  validateWinner = currentGuess => {
-    if (this.state.currentGuess === this.props.board.wordToGuess) {
-      this.togglePopup();
-    }
-  };
-
-  togglePopup() {
-    this.setState({
-      showPopup: !this.state.showPopup
-    });
-  }
-
-  onChange = event => {
-    this.setState({
-      [event.target.name]: event.target.value.toUpperCase()
-    });
-  }; */
   render() {
     /* if (this.props.gameStarted === true) {
       this.resetGuess();
@@ -54,14 +25,13 @@ class Board extends Component {
       targetWordLen = targetWord.length;
     }
 
-    console.log("currentGuess", this.props.currentGuess);
-    console.log("allGuesses", this.props.allGuesses);
     //Set the expectedGrid Array
     let expectedGrid = "";
     for (let i = 0; i < targetWordLen; i++) {
       expectedGrid += targetWord;
     }
     expectedGrid = Array.from(expectedGrid);
+
     console.log(expectedGrid);
 
     //Get the actual grid from DB (convert the string to array)
@@ -73,13 +43,15 @@ class Board extends Component {
 
         return actualGrid;
       }
+
       let actualGrid = this.props.board.guesses;
       return actualGrid;
     };
+
     //First time the actual Grid is empty
-    //if (actualGrid.length === 0) ? populate the first letter from the expected word : use the actualgrid with guesses
+
     let actualGrid = fetchactualGrid();
-    console.log(actualGrid);
+    console.log("actualgrid:", actualGrid);
     //let actualGrid = Array.from("REACTY");
 
     let gridState = [];
