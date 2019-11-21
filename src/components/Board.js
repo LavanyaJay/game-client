@@ -11,6 +11,31 @@ class Board extends Component {
     /* if (this.props.gameStarted === true) {
       this.resetGuess();
     } */
+    if (!this.props.board.wordToGuess) {
+      console.log("inseide empty board");
+      let rows = [];
+      for (let i = 0; i < 6; i++) {
+        let rowID = `row${i}`;
+        let cell = [];
+        for (var idx = 0; idx < 6; idx++) {
+          let cellID = `cell${i}-${idx}`;
+          //let finalIndex = i * targetWordLen + idx;
+
+          cell.push(<td className="box blueSqr" key={cellID} id={cellID}></td>);
+        } //for
+
+        rows.push(
+          <tr key={i} id={rowID} className="box">
+            {cell}
+          </tr>
+        );
+      }
+      return (
+        <Table bordered className="game-board">
+          <tbody>{rows}</tbody>
+        </Table>
+      );
+    }
     let targetWord;
     let targetWordLen;
 
@@ -123,7 +148,7 @@ class Board extends Component {
 
     return (
       <div>
-        <ScoreboardContainer roomId={this.props.roomId}/>
+        <ScoreboardContainer roomId={this.props.roomId} />
         <Table bordered className="game-board">
           <tbody>{rows}</tbody>
         </Table>
