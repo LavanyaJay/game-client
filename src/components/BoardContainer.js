@@ -115,7 +115,6 @@ class BoardContainer extends Component {
         />
         {list}
         <div className="gameControls">
-          {/* Display 'Start game' button, or guess input field */}
           {!this.state.gameStarted ? (
             <button onClick={this.joinGame} className="gameBtn">
               Join game
