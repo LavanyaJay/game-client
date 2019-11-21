@@ -26,7 +26,7 @@ export function jwt(jwt, username, userId) {
   };
 }
 export const signup = (username, userpw) => dispatch => {
-  const data = { username: username, password: userpw };
+  const data = { username: username, password: userpw, points: 0 };
   console.log("signup action:", data);
 
   request
@@ -73,7 +73,7 @@ export const startGame = (roomId, userId) => async dispatch => {
   //Putting wordToGuess to board
   const response = await request
     .put(`${url}/board/${roomId}`)
-    .send({ wordToGuess: word, guesses: "" });
+    .send({ wordToGuess: word, guesses: "", gameOn:false });
   //Fetching board from the db
   const board = await request.get(`${url}/${roomId}/board`).then(response => {
     dispatch(fetchBoard(response.body));
