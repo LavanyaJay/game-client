@@ -8,10 +8,11 @@ export default function LoginForm(props) {
   console.log(props.id);
   return (
     <div className="loginForm">
+    <p>Please login or signup to play</p>
       <Form onSubmit={props.onSubmitLogin}>
         <Form.Group controlId="formBasicUsername">
-          <Form.Label>UserName</Form.Label>
-          <Form.Control
+          <Form.Label>UserName :</Form.Label>
+          <input
             className="input"
             type="text"
             placeholder="Enter username"
@@ -21,8 +22,8 @@ export default function LoginForm(props) {
           />
         </Form.Group>
         <Form.Group controlId="formBasicPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
+          <Form.Label> Password :    </Form.Label>
+          <input    
             className="input"
             type="password"
             placeholder="Enter password"

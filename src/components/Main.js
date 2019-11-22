@@ -1,14 +1,15 @@
 import React, { Component } from "react";
-import UserForm from "./UserForm";
 import Lobby from "./Lobby";
 import LoginFormContainer from './LoginFormContainer'
+import Header from './Header'
 
 class Main extends Component {
   render() {
     return (
-      <div>
+      <div className='full-content'>
+        <Header/>
         <LoginFormContainer/>
-        <Lobby />
+        <Lobby/>
       </div>
     );
   }

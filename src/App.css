@@ -1,15 +1,32 @@
 body * {
   font-family: "Dosis";
   background-color: #ffccb3;
+  text-decoration: none;
+  font-size:20px;
 }
 
 html, body, #root, #root>div {
   height: 100%;
 }
+
+.pageHeader {
+  font-family: 'Monoton', cursive;
+  font-size:80px;
+  color: #0000FE;
+}
+
 /* 
 #root {
   background-color: #ffccb3;
 } */
+
+.full-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  justify-items: center;
+}
 
 input {
   background-color: white;
@@ -38,6 +55,7 @@ input {
 .App-link {
   color: #09d3ac;
 }
+
 .game-board {
   display: grid;
   border: 1px blue solid;
@@ -57,15 +75,26 @@ input {
 
 .loginForm {
   border: 2px solid black;
-  height: auto;
-  width: 30%;
   justify-content: center;
-  padding: 10px;
-  margin:10px;
+  padding: 1em 3em 1em 3em;
+  margin-top: 2em;
+  box-shadow: -10px -5px 5px blue;
+  text-align: center;
+}
+
+.newRoomForm {
+  margin: 4em 1em 2em 1em;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.newRoomForm button {
+  width: 80px;
 }
 
 .input {
-  width: 200px;
+  width: 300px;
 }
 
 .blueSqr {
@@ -130,13 +159,18 @@ input {
 
 .room {
   border: 1px solid black;
-  width: 150px;
+  width: 200px;
   height: 150px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 5px;
+  margin: 10px;
   border-radius: 10%;
+  box-shadow: -10px -5px 5px;
+}
+
+.room:hover {
+  background: #FFDFCF;
 }
 
 .roomGallery {

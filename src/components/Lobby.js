@@ -33,27 +33,15 @@ class Lobby extends Component {
 
   render() {
     const list = this.props.rooms.map((room, index) => (
-      <div key={index} className='room'>
-        <Link to={`/room/${room.name}`}>{room.name}</Link>
-      </div>
+      <Link to={`/room/${room.name}`} style={{ textDecoration: 'none' }}><div key={index} className='room'>
+        {room.name}
+      </div></Link>
     ));
     return (
       <div>
-        {/* 
-      {user ? (<div>
-          <p>Welcome back, {this.props.user.username}</p>
-          <Link to='/'><p>Go back home</p></Link>
-          </div>
-        ) : (
-          <LoginForm
-            onSubmit={this.onSubmit}
-            onChange={this.onChange}
-            values={this.state}
-          />
-        )} */}
 
-        <form onSubmit={this.onSubmit}>
-          <label>Create a new room</label>
+        <form className='newRoomForm' onSubmit={this.onSubmit}>
+          <label>Create a new room :</label>
           <input
             type="text"
             onChange={this.onChange}
