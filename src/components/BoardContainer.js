@@ -18,11 +18,13 @@ class BoardContainer extends Component {
 
   componentDidMount() {}
 
-  onSubmit = (event, userId) => {
+  onSubmit = (event, userId, roomUsersIds) => {
     event.preventDefault();
     const y = this.state.allGuesses + this.state.currentGuess;
     this.setState({ allGuesses: y });
-    this.props.updateBoard(this.props.name, y);
+    const futurePlayer = roomUsersIds.filter(userId=>userId !== this.props.user.userId);
+    this.props.updateBoard(this.props.name, y, futurePlayer[0]);
+    console.log('FUTURE PLAYER IS', futurePlayer, roomUsersIds, this.props.user.userId);
     this.validateWinner(this.state.currentGuess, userId);
     this.setState({ currentGuess: "" });
     this.props.addPoints(userId, this.state.score);
@@ -102,30 +104,45 @@ class BoardContainer extends Component {
     const board = this.fetchBoard(id);
 
     const roomUsersIds = users.map(user => user.id);
-    console.log("USER IDS IN THIS ROOM", roomUsersIds, this.props.userId);
+    const isUserInRoom = roomUsersIds.includes(this.props.userId);
     const has2Players = users.length === 2;
-    console.log("DOES THIS ROOM HAVE 2 PLAYERS?", has2Players);
+    const currentBoard = this.props.rooms.find(room => room.id === id).board;
+    const isGameOn = currentBoard.gameOn;
+    const currentPlayer = currentBoard.currentPlayer;
+    const isItMyTurn = currentPlayer === this.props.userId;
 
-    const isUserInRoom =
-      this.props.user && roomUsersIds.includes(this.props.user.userId);
-    console.log("AM I JOINED IN THIS ROOM ?", isUserInRoom);
-
+    console.log("THIS PROPS USER", this.props.user);
     const userContent = this.props.user ? (
-      !isUserInRoom ? (
-        <button onClick={this.joinGame} className="gameBtn">
-          Join game
-        </button>
-      ) : has2Players /* Are there two players in the room ? If so, display 'Start game */ ? (
-        <button
-          onClick={() => this.startGame(id, this.props.user.userId)}
-          className="gameBtn"
-        >
-          Start game1
-        </button>
+      !isGameOn ? (
+        !isUserInRoom ? (
+          <button onClick={this.joinGame}>Join game</button>
+        ) : has2Players ? (
+          /* Are there two players in the room ? If so, display ’Start game */ <button
+            onClick={() => this.startGame(id, this.props.user.userId)}
+          >
+            Start game
+          </button>
+        ) : (
+          <p>Waiting for another player to join...</p>
+        ) 
+        /* Only one player in the room ? Display ‘waiting for another player’ */
+      ) : isItMyTurn ? (
+        <form onSubmit={(event) => this.onSubmit(event, this.props.user.userId, roomUsersIds)}>
+          <input
+            type="text"
+            name="currentGuess"
+            onChange={this.onChange}
+            value={this.state.currentGuess}
+            maxLength="6"
+          ></input>
+          <button>Submit</button>
+        </form>
       ) : (
-        <p>Waiting for another player to join...</p>
-      ) /* Only one player in the room ? Display 'waiting for another player' */
-    ) : null;
+        <p>Waiting for your opponent to play...</p>
+      )
+    ) : (
+      <p>Please login to play</p>
+    );
 
     return (
       <div>
@@ -142,24 +159,7 @@ class BoardContainer extends Component {
         />
         {list}
         <div className="gameControls">
-          {/* Display 'Start game' button, or guess input field */}
-          {/* PUT ALL LOGIC BELOW IN 'IF gameOn === false */}
-          {/* If user not in room : display 'Join game' */}
           {userContent}
-
-          {/* IF gameON === TRUE, SHOW INPUT FIELD */}
-          <form
-            onSubmit={event => this.onSubmit(event, this.props.user.userId)}
-          >
-            <input
-              type="text"
-              name="currentGuess"
-              onChange={this.onChange}
-              value={this.state.currentGuess}
-              maxLength="6"
-            ></input>
-            <button>Submit</button>
-          </form>
         </div>
       </div>
     );
