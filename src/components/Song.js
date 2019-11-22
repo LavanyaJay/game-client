@@ -1,4 +1,4 @@
-import soundfile from "../sounds/Hypnotic-Puzzle3.mp3";
+import soundfile from "../sounds/donesound.wav";
 import Sound from "react-sound";
 import React, { Component } from "react";
 

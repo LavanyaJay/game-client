@@ -6,6 +6,7 @@ import { url } from "../constants";
 import superagent from "superagent";
 import { updateBoard, updatePlayer } from "../actions/board";
 import ScoreboardContainer from "./ScoreboardContainer";
+import Popup from "./Popup";
 
 class BoardContainer extends Component {
   state = {
@@ -13,17 +14,22 @@ class BoardContainer extends Component {
     currentGuess: "",
     allGuesses: "",
     showPopup: false,
-    score: 0
+    showPopupeog: false,
+    score: 0,
+    submitFail: false
   };
 
   componentDidMount() {}
 
   onSubmit = (event, userId, roomUsersIds, board) => {
-    /*  if (!this.canBeSubmitted()) {
-      event.preventDefault();
-      return;
-    } */
     event.preventDefault();
+
+    if (!this.canBeSubmitted()) {
+      this.setState({ submitFail: true });
+    }
+
+    this.setState({ submitFail: false });
+
     //const y = this.state.allGuesses + this.state.currentGuess;
     const y = board.guesses + this.state.currentGuess;
     //this.setState({ allGuesses: y });
@@ -37,20 +43,29 @@ class BoardContainer extends Component {
       roomUsersIds,
       this.props.user.userId
     );
-    this.validateWinner(userId, y, futurePlayer[0]);
-    this.validateEndOfGame(userId, y, futurePlayer[0], board);
+    //this.validateWinner(userId, y, futurePlayer[0]);
+
+    const game = this.validateWinner(userId, y, futurePlayer[0], board);
+    console.log("gameon-------->", game);
+    if (game === undefined) {
+      this.validateEndOfGame(userId, y, futurePlayer[0], board);
+    }
+
+    //this.validateEndOfGame(userId, y, futurePlayer[0], board);
     this.setState({ currentGuess: "" });
 
     //this.props.addPoints(userId, this.state.score);
   };
 
-  validateWinner = (userId, y, futurePlayer) => {
-    console.log("userid in Validate Winner: ", userId);
-    if (this.state.currentGuess === this.props.board.wordToGuess) {
+  validateWinner = (userId, y, futurePlayer, board) => {
+    const expectedWord = board.wordToGuess.replace(" ", "");
+    console.log("userid in Validate Winner: ", expectedWord);
+    if (this.state.currentGuess === expectedWord) {
       this.props.addPoints(userId, 10);
       const gameOn = false;
       this.props.updateBoard(this.props.name, y, futurePlayer[0], gameOn);
       this.togglePopup();
+      return gameOn;
     }
   };
 
@@ -59,7 +74,7 @@ class BoardContainer extends Component {
     if (board.guesses.length >= 36) {
       const gameOn = false;
       this.props.updateBoard(this.props.name, y, futurePlayer[0], gameOn);
-      this.togglePopup();
+      this.togglePopupeog();
     }
   };
   calculateScore = score => {
@@ -69,6 +84,12 @@ class BoardContainer extends Component {
   togglePopup = () => {
     this.setState({
       showPopup: !this.state.showPopup
+    });
+  };
+
+  togglePopupeog = () => {
+    this.setState({
+      showPopupeog: !this.state.showPopupeog
     });
   };
 
@@ -160,7 +181,8 @@ class BoardContainer extends Component {
         )
       ) : /* Only one player in the room ? Display ‘waiting for another player’ */
       isItMyTurn ? (
-        <form className='submitGuess'
+        <form
+          className="submitGuess"
           onSubmit={event =>
             this.onSubmit(event, this.props.user.userId, roomUsersIds, board)
           }
@@ -172,9 +194,11 @@ class BoardContainer extends Component {
             value={this.state.currentGuess}
             maxLength="6"
           ></input>
-          {/* <button disabled={!isEnabled}>Submit</button> */}
-          <button>Submit</button>
-          <p className='hint'><em>Please enter a 6 letter guess</em></p>
+          <button disabled={!isEnabled}>Submit</button>
+          {/* <button>Submit</button> */}
+          <p className="hint">
+            <em>Please enter a 6 letter guess</em>
+          </p>
         </form>
       ) : (
         <p>Waiting for your opponent to play...</p>
@@ -185,6 +209,7 @@ class BoardContainer extends Component {
 
     return (
       <div className="gameContent">
+        {this.state.submitFail && <Popup>You need exactly 6 characters</Popup>}
         <Board
           board={board}
           name={this.props.name}
@@ -192,6 +217,8 @@ class BoardContainer extends Component {
           allGuesses={this.state.allGuesses}
           togglePopup={this.togglePopup}
           showPopup={this.state.showPopup}
+          togglePopupeog={this.togglePopupeog}
+          showPopupeog={this.state.showPopupeog}
           roomId={id}
           scores={this.state.score}
           calculateScore={this.calculateScore}
