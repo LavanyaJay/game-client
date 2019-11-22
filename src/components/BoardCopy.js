@@ -8,18 +8,22 @@ import ScoreboardContainer from "../components/ScoreboardContainer";
 
 class Board extends Component {
   render() {
-    let board = this.props.board;
-    let boardLen = 6;
-
-    if (!board || !board.wordToGuess) {
+    /* if (this.props.gameStarted === true) {
+      this.resetGuess();
+    } */
+    /*     if (!this.props.board.wordToGuess) {
+      console.log("inseide empty board");
       let rows = [];
-      for (let i = 0; i < boardLen; i++) {
+      for (let i = 0; i < 6; i++) {
         let rowID = `row${i}`;
         let cell = [];
-        for (let idx = 0; idx < boardLen; idx++) {
+        for (let idx = 0; idx < 6; idx++) {
           let cellID = `cell${i}-${idx}`;
+          //let finalIndex = i * targetWordLen + idx;
+
           cell.push(<td className="box blueSqr" key={cellID} id={cellID}></td>);
         } //for
+
         rows.push(
           <tr key={i} id={rowID} className="box">
             {cell}
@@ -29,43 +33,66 @@ class Board extends Component {
       return (
         <div>
           <ScoreboardContainer roomId={this.props.roomId} />
+
           <Table bordered className="game-board">
             <tbody>{rows}</tbody>
           </Table>
         </div>
       );
     }
+ */
+    let targetWord;
+    let targetWordLen = 6;
 
     //Get expected word from DB
-    let targetWord = "";
-    if (board.wordToGuess) {
-      targetWord = board.wordToGuess;
-    }
+
+    this.props.wordToGuess !== null
+      ? (targetWord = this.props.board.wordToGuess)
+      : (targetWord = "");
+
+    /*     if (targetWord) {
+      targetWordLen = 0;
+    } else {
+      targetWordLen = targetWord.length;
+    } */
 
     //Set the expectedGrid Array
     let expectedGrid = "";
-    for (let i = 0; i < boardLen; i++) {
+    for (let i = 0; i < targetWordLen; i++) {
       expectedGrid += targetWord;
     }
     expectedGrid = Array.from(expectedGrid);
 
     //Get the actual grid from DB (convert the string to array)
-    let actualGrid = expectedGrid[0];
-    if (board.guesses) {
-      actualGrid = Array.from(board.guesses);
-    }
-    console.log("actual grid = " + actualGrid);
+
+    const fetchactualGrid = () => {
+      if (!this.props.board.guesses && targetWord) {
+        const firstWord = targetWord.slice(0, 1);
+        let actualGrid = Array.from(firstWord);
+
+        return actualGrid;
+      }
+
+      let actualGrid = this.props.board.guesses;
+      return actualGrid;
+    };
+
+    //First time the actual Grid is empty
+
+    let actualGrid = fetchactualGrid();
+    console.log("actualgrid:", actualGrid);
+    //let actualGrid = Array.from("REACTY");
 
     let gridState = [];
     let objMap = {};
-    let scores = this.props.scores;
 
     //populate teh gridState with each cell's state
-    for (let i = 0; i < boardLen * boardLen; i++) {
+    for (let i = 0; i < expectedGrid.length; i++) {
       //populate the objMap if we are on a new row
-      if (i % boardLen === 0) {
+      if (i % targetWordLen === 0) {
+        console.log("in new row " + i + " ..len = " + (i % targetWordLen));
         objMap = {};
-        for (let i = 0; i < targetWord.length; i++) {
+        for (let i = 0; i < targetWordLen; i++) {
           if (objMap[targetWord[i]]) {
             objMap[targetWord[i]] += 1;
           } else {
@@ -74,7 +101,7 @@ class Board extends Component {
         } //for
       } //if
 
-      gridState.push(0); //assign initially as 'not found'
+      gridState.push(-1); //assign initially as 'not found'
       if (objMap[actualGrid[i]] && objMap[actualGrid[i]] > 0) {
         gridState[i] = 1; //found the letter
         if (actualGrid[i] === expectedGrid[i]) {
@@ -84,27 +111,14 @@ class Board extends Component {
       }
     } //outermost for
 
-    //calculate scores; use gridState to score
-    let score = 0;
-    for (
-      let i = actualGrid.length - 1;
-      i >= actualGrid.length - boardLen;
-      i--
-    ) {
-      score += gridState[i];
-    } //for
-    console.log("---------------> score = " + score);
-    this.props.calculateScore(score);
-
-    //build the grid with all values that we have now
     let rows = [];
-    for (let i = 0; i < boardLen; i++) {
+    for (let i = 0; i < targetWordLen; i++) {
       let rowID = `row${i}`;
       let cell = [];
-      for (let idx = 0; idx < boardLen; idx++) {
+      for (let idx = 0; idx < 6; idx++) {
         let cellID = `cell${i}-${idx}`;
-        let finalIndex = i * boardLen + idx;
-        if (gridState[finalIndex] === 0) {
+        let finalIndex = i * targetWordLen + idx;
+        if (gridState[finalIndex] === -1) {
           cell.push(
             <td className="box blueSqr" key={cellID} id={cellID}>
               {actualGrid[finalIndex]}
@@ -132,7 +146,7 @@ class Board extends Component {
           {cell}
         </tr>
       );
-    } //main for
+    }
 
     return (
       <div>
