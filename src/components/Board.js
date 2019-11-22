@@ -142,10 +142,17 @@ class Board extends Component {
         </Table>
 
         {this.props.showPopup ? (
-          <Popup
-            text="Congrats! You Win!!"
-            closePopup={this.props.togglePopup}
-          />
+          board.guesses.length >= 36 ? (
+            <Popup
+              text="Sorry, End Of game!"
+              closePopup={this.props.togglePopup}
+            />
+          ) : (
+            <Popup
+              text="Congrats! You Win!!"
+              closePopup={this.props.togglePopup}
+            />
+          )
         ) : null}
       </div>
     );
