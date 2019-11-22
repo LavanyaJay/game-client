@@ -26,8 +26,6 @@ class App extends Component {
     return (
         <Fragment>
           <Route path="/" component={Main} exact></Route>
-          <Route path="/signup/:id" component={LoginFormContainer}></Route>
-          <Route path="/login/:id" component={LoginFormContainer}></Route>
           <Route path="/room/:name" component={GameContainer}></Route>
         </Fragment>
     );
