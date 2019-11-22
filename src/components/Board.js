@@ -3,6 +3,7 @@ import { Table } from "react-bootstrap";
 import { updateBoard } from "../actions/board";
 import { connect } from "react-redux";
 import Popup from "./Popup";
+import Popupeog from "./Popupeog";
 import "../App.css";
 import ScoreboardContainer from "../components/ScoreboardContainer";
 import Song from "./Song";
@@ -136,27 +137,26 @@ class Board extends Component {
     } //main for
 
     return (
-      <div className='gameContent'>
+      <div className="gameContent">
         <ScoreboardContainer roomId={this.props.roomId} />
         <Table bordered className="game-board">
           <tbody>{rows}</tbody>
         </Table>
 
         {this.props.showPopup ? (
-          board.guesses.length >= 36 ? (
+          <div>
+            <Song />
             <Popup
-              text="Sorry, End Of game!"
+              text="Congrats! You Win!!"
               closePopup={this.props.togglePopup}
             />
-          ) : (
-            <div>
-              <Song />
-              <Popup
-                text="Congrats! You Win!!"
-                closePopup={this.props.togglePopup}
-              />
-            </div>
-          )
+          </div>
+        ) : null}
+        {this.props.showPopupeog ? (
+          <Popupeog
+            text={`Sorry, game is over!The word is:${targetWord}`}
+            closePopup={this.props.togglePopupeog}
+          />
         ) : null}
       </div>
     );
