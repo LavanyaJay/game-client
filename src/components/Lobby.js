@@ -39,7 +39,6 @@ class Lobby extends Component {
     ));
     return (
       <div>
-
         <form className='newRoomForm' onSubmit={this.onSubmit}>
           <label>Create a new room :</label>
           <input

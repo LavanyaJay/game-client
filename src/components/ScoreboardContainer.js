@@ -12,7 +12,7 @@ class ScoreboardContainer extends Component {
         const player1 = users.find(user=> user.id === userIds[0]) || null;
         const player2 = users.find(user=> user.id === userIds[1]) || null;
         return (
-                <div>
+                <div className='gameContent'>
                     {has2Players ? 
                     <Scoreboard player1={player1} player2={player2}/> 
                     : 

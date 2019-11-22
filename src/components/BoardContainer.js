@@ -172,7 +172,7 @@ class BoardContainer extends Component {
     );
 
     return (
-      <div>
+      <div className="gameContent">
         <Board
           board={board}
           name={this.props.name}
