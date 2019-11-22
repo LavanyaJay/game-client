@@ -33,9 +33,9 @@ class Lobby extends Component {
 
   render() {
     const list = this.props.rooms.map((room, index) => (
-      <p key={index}>
+      <div key={index} className='room'>
         <Link to={`/room/${room.name}`}>{room.name}</Link>
-      </p>
+      </div>
     ));
     return (
       <div>
@@ -53,7 +53,7 @@ class Lobby extends Component {
         )} */}
 
         <form onSubmit={this.onSubmit}>
-          <label>Lobby Name</label>
+          <label>Create a new room</label>
           <input
             type="text"
             onChange={this.onChange}
@@ -62,7 +62,7 @@ class Lobby extends Component {
           <button>Submit</button>
           <button onClick={this.reset}>Reset</button>
         </form>
-        {list}
+        <div className='roomGallery'>{list}</div>
       </div>
     );
   }

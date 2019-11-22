@@ -2,45 +2,44 @@ import React from "react";
 import LoginForm from "./LoginForm";
 import { connect } from "react-redux";
 import { login, signup } from "../actions/login";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import { Button } from "react-bootstrap";
 
 class LoginFormContainer extends React.Component {
   state = { username: "", password: "" };
-  // onSubmit = event => {
-  //   console.log("submit: ", this.id.id);
-  //   event.preventDefault();
-  //   if (this.id.id === "1") {
-  //     console.log("inside1: ", this.id);
-  //     this.props.signup(this.state.username, this.state.password);
-  //   }
-  //   if (this.id.id === "2") {
-  //     console.log("inside: ", this.id);
-  //     this.props.login(this.state.username, this.state.password);
-  //   }
-  // };
+  onSubmitLogin = event => {
+    event.preventDefault();
+    this.props.login(this.state.username, this.state.password);
+  };
 
-  // onChange = event => {
-  //   this.setState({
-  //     [event.target.name]: event.target.value
-  //   });
-  // };
+  onSubmitSignup = event => {
+    event.preventDefault();
+    this.props.signup(this.state.username, this.state.password);
+  };
+
+  onChange = event => {
+    this.setState({
+      [event.target.name]: event.target.value
+    });
+  };
 
   render() {
     const user = this.props.user;
     return (
-      <div>
-        {user ? (<div>
-          <p>Welcome back, {this.props.user.username}</p>
-          <Link to='/'><p>Go back home</p></Link>
-          </div>
-        ) : (
-          <LoginForm
-            onSubmit={this.onSubmit}
-            onChange={this.onChange}
-            values={this.state}
-          />
-        )}
-      </div>
+        <div>
+          {user ? (
+            <div>
+              <p>Welcome, <strong>{this.props.user.username}</strong></p>
+            </div>
+          ) : (
+            <LoginForm
+              onSubmitLogin={this.onSubmitLogin}
+              onSubmitSignup={this.onSubmitSignup}
+              onChange={this.onChange}
+              values={this.state}
+            />
+          )}
+        </div>
     );
   }
 }

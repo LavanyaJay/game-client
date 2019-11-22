@@ -8,7 +8,6 @@ class Main extends Component {
     return (
       <div>
         <LoginFormContainer/>
-        <UserForm />
         <Lobby />
       </div>
     );

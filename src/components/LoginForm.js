@@ -8,7 +8,7 @@ export default function LoginForm(props) {
   console.log(props.id);
   return (
     <div className="loginForm">
-      <Form onSubmit={event => props.onSubmit(event)}>
+      <Form onSubmit={props.onSubmitLogin}>
         <Form.Group controlId="formBasicUsername">
           <Form.Label>UserName</Form.Label>
           <Form.Control
@@ -20,24 +20,30 @@ export default function LoginForm(props) {
             value={props.values.username}
           />
         </Form.Group>
-
         <Form.Group controlId="formBasicPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control
             className="input"
             type="password"
-            placeholder="Password"
+            placeholder="Enter password"
             name="password"
             onChange={props.onChange}
             value={props.values.password}
           />
         </Form.Group>
-
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
+        <div className='formBtns'>
+          <div>
+              <Button variant="primary" type="submit">
+                Login
+              </Button>
+          </div>
+          <div>
+              <Button variant="primary" onClick={props.onSubmitSignup}>
+                Sign Up
+              </Button>
+          </div>
+        </div>
       </Form>
-      <Link to="/">Back to home</Link>
     </div>
   );
 }
