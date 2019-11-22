@@ -39,14 +39,17 @@ const boardUpdate = board => ({
   board
 });
 //Update Board
-export const updateBoard = (name, guesses, futurePlayer) => (dispatch, getState) => {
+export const updateBoard = (name, guesses, futurePlayer, gameOn) => (
+  dispatch,
+  getState
+) => {
   console.log("in action for update guess");
   const user = request
     .get(`${url}/room/${name}`)
     .then(response => {
       console.log("in get board", response.body);
       const id = response.body.id;
-      updateGuess(id, guesses, futurePlayer, dispatch);
+      updateGuess(id, guesses, futurePlayer, gameOn, dispatch);
     })
     .catch(res => {
       console.log("error", res);
@@ -55,11 +58,13 @@ export const updateBoard = (name, guesses, futurePlayer) => (dispatch, getState)
   //Fetching board from the db
 };
 
-const updateGuess = (id, guesses, futurePlayer, dispatch) => {
+const updateGuess = (id, guesses, futurePlayer, gameOn, dispatch) => {
   request
     .put(`${url}/board/${id}`)
     .send({
-      guesses: guesses, currentPlayer: futurePlayer
+      guesses: guesses,
+      currentPlayer: futurePlayer,
+      gameOn: gameOn
     })
     .then(response => {
       dispatch(boardUpdate(response.body));

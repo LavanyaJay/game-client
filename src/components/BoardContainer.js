@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Board from "./Board.js";
 import { connect } from "react-redux";
-import {  startGame, addPoints } from "../actions/login";
+import { startGame, addPoints } from "../actions/login";
 import { url } from "../constants";
 import superagent from "superagent";
 import { updateBoard, updatePlayer } from "../actions/board";
@@ -18,26 +18,45 @@ class BoardContainer extends Component {
 
   componentDidMount() {}
 
-  onSubmit = (event, userId, roomUsersIds) => {
+  onSubmit = (event, userId, roomUsersIds, board) => {
     event.preventDefault();
-    const y = this.state.allGuesses + this.state.currentGuess;
-    this.setState({ allGuesses: y });
-    const futurePlayer = roomUsersIds.filter(userId=>userId !== this.props.user.userId);
+    //const y = this.state.allGuesses + this.state.currentGuess;
+    const y = board.guesses + this.state.currentGuess;
+    //this.setState({ allGuesses: y });
+    const futurePlayer = roomUsersIds.filter(
+      userId => userId !== this.props.user.userId
+    );
     this.props.updateBoard(this.props.name, y, futurePlayer[0]);
-    console.log('FUTURE PLAYER IS', futurePlayer, roomUsersIds, this.props.user.userId);
-    this.validateWinner(this.state.currentGuess, userId);
+    console.log(
+      "FUTURE PLAYER IS",
+      futurePlayer,
+      roomUsersIds,
+      this.props.user.userId
+    );
+    this.validateWinner(userId, y, futurePlayer[0]);
+    this.validateEndOfGame(userId, y, futurePlayer[0], board);
     this.setState({ currentGuess: "" });
-    this.props.addPoints(userId, this.state.score);
+    //this.props.addPoints(userId, this.state.score);
   };
 
-  validateWinner = (currentGuess, userId) => {
+  validateWinner = (userId, y, futurePlayer) => {
     console.log("userid in Validate Winner: ", userId);
     if (this.state.currentGuess === this.props.board.wordToGuess) {
-      //this.props.addPoints(userId, 10);
+      this.props.addPoints(userId, 10);
+      const gameOn = false;
+      this.props.updateBoard(this.props.name, y, futurePlayer[0], gameOn);
       this.togglePopup();
     }
   };
 
+  validateEndOfGame = (userId, y, futurePlayer, board) => {
+    console.log("userid in Validate EndOfGame: ", userId);
+    if (board.guesses.length >= 36) {
+      const gameOn = false;
+      this.props.updateBoard(this.props.name, y, futurePlayer[0], gameOn);
+      this.togglePopup();
+    }
+  };
   calculateScore = score => {
     this.setState({ score: score });
   };
@@ -59,11 +78,9 @@ class BoardContainer extends Component {
     const { jwt } = this.props.user;
     const name = this.props.name;
     const joinUrl = `${url}/join/${name}`;
-    console.log('JOIN URL IS ; ', joinUrl)
     const response = await superagent
       .patch(joinUrl)
       .set({ authorization: `Bearer ${jwt}` });
-    console.log('ERROR RESPONSE', response);
   };
 
   startGame = (roomId, userId) => {
@@ -105,7 +122,7 @@ class BoardContainer extends Component {
 
     const board = this.fetchBoard(id);
     let isGameOn = false;
-    let currentPlayer= '';
+    let currentPlayer = "";
     const roomUsersIds = users.map(user => user.id);
     const isUserInRoom = roomUsersIds.includes(this.props.user.userId);
     const has2Players = users.length === 2;
@@ -129,10 +146,14 @@ class BoardContainer extends Component {
           </button>
         ) : (
           <p>Waiting for another player to join...</p>
-        ) 
-        /* Only one player in the room ? Display ‘waiting for another player’ */
-      ) : isItMyTurn ? (
-        <form onSubmit={(event) => this.onSubmit(event, this.props.user.userId, roomUsersIds)}>
+        )
+      ) : /* Only one player in the room ? Display ‘waiting for another player’ */
+      isItMyTurn ? (
+        <form
+          onSubmit={event =>
+            this.onSubmit(event, this.props.user.userId, roomUsersIds, board)
+          }
+        >
           <input
             type="text"
             name="currentGuess"
@@ -163,9 +184,7 @@ class BoardContainer extends Component {
           calculateScore={this.calculateScore}
         />
         {list}
-        <div className="gameControls">
-          {userContent}
-        </div>
+        <div className="gameControls">{userContent}</div>
       </div>
     );
   }
@@ -181,7 +200,6 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  
   startGame,
   updateBoard,
   updatePlayer,
