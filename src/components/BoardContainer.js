@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Board from "./Board.js";
 import { connect } from "react-redux";
-import { joinGame, startGame, addPoints } from "../actions/login";
+import {  startGame, addPoints } from "../actions/login";
 import { url } from "../constants";
 import superagent from "superagent";
 import { updateBoard, updatePlayer } from "../actions/board";
@@ -56,12 +56,14 @@ class BoardContainer extends Component {
   };
 
   joinGame = async () => {
-    const { jwt } = this.props;
+    const { jwt } = this.props.user;
     const name = this.props.name;
     const joinUrl = `${url}/join/${name}`;
+    console.log('JOIN URL IS ; ', joinUrl)
     const response = await superagent
       .patch(joinUrl)
       .set({ authorization: `Bearer ${jwt}` });
+    console.log('ERROR RESPONSE', response);
   };
 
   startGame = (roomId, userId) => {
@@ -102,14 +104,17 @@ class BoardContainer extends Component {
       );
 
     const board = this.fetchBoard(id);
-
+    let isGameOn = false;
+    let currentPlayer= '';
     const roomUsersIds = users.map(user => user.id);
-    const isUserInRoom = roomUsersIds.includes(this.props.userId);
+    const isUserInRoom = roomUsersIds.includes(this.props.user.userId);
     const has2Players = users.length === 2;
     const currentBoard = this.props.rooms.find(room => room.id === id).board;
-    const isGameOn = currentBoard.gameOn;
-    const currentPlayer = currentBoard.currentPlayer;
-    const isItMyTurn = currentPlayer === this.props.userId;
+    if (currentBoard) {
+      isGameOn = currentBoard.gameOn;
+      currentPlayer = currentBoard.currentPlayer;
+    }
+    const isItMyTurn = currentPlayer === this.props.user.userId;
 
     console.log("THIS PROPS USER", this.props.user);
     const userContent = this.props.user ? (
@@ -176,7 +181,7 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  joinGame,
+  
   startGame,
   updateBoard,
   updatePlayer,

@@ -41,22 +41,22 @@ export const signup = (username, userpw) => dispatch => {
     });
 };
 
-//Joining Game
-export const joinGame = roomId => (dispatch, getState) => {
-  const state = getState();
-  const { userId, jwt } = state.user;
-  const data = { userId: userId, roomId: roomId };
-  request
-    .patch(`${url}/join`)
-    .set("Authorization", `Bearer ${jwt}`)
-    .send(data)
-    .then(response => {
-      console.log("inresponse", response.body);
-    })
-    .catch(res => {
-      console.log("error", res);
-    });
-};
+//Joining Game - not needed anymore
+// export const joinGame = roomId => (dispatch, getState) => {
+//   const state = getState();
+//   const { userId, jwt } = state.user;
+//   const data = { userId: userId, roomId: roomId };
+//   request
+//     .patch(`${url}/join`)
+//     .set("Authorization", `Bearer ${jwt}`)
+//     .send(data)
+//     .then(response => {
+//       console.log("inresponse", response.body);
+//     })
+//     .catch(res => {
+//       console.log("error", res);
+//     });
+// };
 
 //Starting game
 export const startGame = (roomId, userId) => async dispatch => {
