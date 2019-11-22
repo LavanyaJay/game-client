@@ -44,6 +44,14 @@ input {
   border-radius: 10%;
 }
 
+.scoreboard {
+  border: 1px solid black;
+  box-shadow: -10px -5px 5px blue;
+  padding: 10px;
+  margin-bottom: 20px;
+  width:100%;
+}
+
 .App {
   text-align: center;
 }
@@ -197,4 +205,9 @@ input {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+}
+
+.restartBtn {
+  background: #FF595B;
+  color: white;
 }

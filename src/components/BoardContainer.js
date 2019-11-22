@@ -115,6 +115,7 @@ class BoardContainer extends Component {
       return "This room does not exist";
     } else {
       const roomId = room.id;
+      const roomName = room.name;
     }
     console.log("FOUND ROOM", room);
 
@@ -175,9 +176,21 @@ class BoardContainer extends Component {
           {/* <button disabled={!isEnabled}>Submit</button> */}
           <button>Submit</button>
           <p className='hint'><em>Please enter a 6 letter guess</em></p>
+          <button
+            onClick={() => this.startGame(id, this.props.user.userId)} className='restartBtn'
+          >
+            Cancel and start new game
+          </button>
         </form>
       ) : (
+        <div>
         <p>Waiting for your opponent to play...</p>
+        <button
+            onClick={() => this.startGame(id, this.props.user.userId)} className='restartBtn'
+          >
+          Cancel and start new game
+          </button>
+          </div>
       )
     ) : (
       <p>Please login to play</p>
@@ -185,6 +198,7 @@ class BoardContainer extends Component {
 
     return (
       <div className="gameContent">
+        {room ? <p>You are in room <strong>{room.name}</strong></p> : <p>This room doesn't exist</p>}
         <Board
           board={board}
           name={this.props.name}
