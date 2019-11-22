@@ -149,7 +149,7 @@ class BoardContainer extends Component {
         )
       ) : /* Only one player in the room ? Display ‘waiting for another player’ */
       isItMyTurn ? (
-        <form
+        <form className='submitGuess'
           onSubmit={event =>
             this.onSubmit(event, this.props.user.userId, roomUsersIds, board)
           }
@@ -162,6 +162,7 @@ class BoardContainer extends Component {
             maxLength="6"
           ></input>
           <button>Submit</button>
+          <p className='hint'><em>Please enter a 6 letter guess</em></p>
         </form>
       ) : (
         <p>Waiting for your opponent to play...</p>
@@ -183,7 +184,7 @@ class BoardContainer extends Component {
           scores={this.state.score}
           calculateScore={this.calculateScore}
         />
-        {list}
+        {/* {list} */}
         <div className="gameControls">{userContent}</div>
       </div>
     );
