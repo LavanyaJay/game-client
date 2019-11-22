@@ -135,7 +135,7 @@ class Board extends Component {
     } //main for
 
     return (
-      <div>
+      <div className='gameContent'>
         <ScoreboardContainer roomId={this.props.roomId} />
         <Table bordered className="game-board">
           <tbody>{rows}</tbody>

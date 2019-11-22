@@ -11,8 +11,12 @@ html, body, #root, #root>div {
 
 .pageHeader {
   font-family: 'Monoton', cursive;
-  font-size:80px;
+  font-size:90px;
   color: #0000FE;
+}
+
+.submitGuess {
+  text-align: center;
 }
 
 /* 
@@ -25,6 +29,13 @@ html, body, #root, #root>div {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  justify-items: center;
+}
+
+.gameContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-items: center;
 }
 
@@ -94,7 +105,7 @@ input {
 }
 
 .input {
-  width: 300px;
+  width: 15em;
 }
 
 .blueSqr {
@@ -129,6 +140,15 @@ input {
   background-color: white;
   color: #ffccb3;
 }
+
+.gamePage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  justify-items: center;
+}
+
 .popup {
   position: fixed;
   width: 100%;
