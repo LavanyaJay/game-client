@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Board from "./Board.js";
 import { connect } from "react-redux";
-import { joinGame, startGame } from "../actions/login";
+import { joinGame, startGame, addPoints } from "../actions/login";
 import { url } from "../constants";
 import superagent from "superagent";
 import { updateBoard, updatePlayer } from "../actions/board";
@@ -12,26 +12,34 @@ class BoardContainer extends Component {
     guess: "",
     currentGuess: "",
     allGuesses: "",
-    showPopup: false
+    showPopup: false,
+    score: 0
   };
 
   componentDidMount() {}
 
-  onSubmit = (event, roomUsersIds) => {
+  onSubmit = (event, userId, roomUsersIds) => {
     event.preventDefault();
     const y = this.state.allGuesses + this.state.currentGuess;
     this.setState({ allGuesses: y });
     const futurePlayer = roomUsersIds.filter(userId=>userId !== this.props.user.userId);
     this.props.updateBoard(this.props.name, y, futurePlayer[0]);
     console.log('FUTURE PLAYER IS', futurePlayer, roomUsersIds, this.props.user.userId);
-    this.validateWinner(this.state.currentGuess);
+    this.validateWinner(this.state.currentGuess, userId);
     this.setState({ currentGuess: "" });
+    this.props.addPoints(userId, this.state.score);
   };
 
-  validateWinner = currentGuess => {
+  validateWinner = (currentGuess, userId) => {
+    console.log("userid in Validate Winner: ", userId);
     if (this.state.currentGuess === this.props.board.wordToGuess) {
+      //this.props.addPoints(userId, 10);
       this.togglePopup();
     }
+  };
+
+  calculateScore = score => {
+    this.setState({ score: score });
   };
 
   togglePopup = () => {
@@ -60,11 +68,13 @@ class BoardContainer extends Component {
     this.props.startGame(roomId, userId);
     this.setState({ allGuesses: "" });
   };
+
   fetchBoard = id => {
     const room = this.props.rooms.find(room => room.id === id);
     console.log("this is the board: ", room.board);
     return room.board;
   };
+
   render() {
     const name = this.props.name;
     console.log("PROPS from boardcontainer", this.props);
@@ -117,7 +127,7 @@ class BoardContainer extends Component {
         ) 
         /* Only one player in the room ? Display ‘waiting for another player’ */
       ) : isItMyTurn ? (
-        <form onSubmit={(event) => this.onSubmit(event, roomUsersIds)}>
+        <form onSubmit={(event) => this.onSubmit(event, this.props.user.userId, roomUsersIds)}>
           <input
             type="text"
             name="currentGuess"
@@ -144,28 +154,12 @@ class BoardContainer extends Component {
           togglePopup={this.togglePopup}
           showPopup={this.state.showPopup}
           roomId={id}
+          scores={this.state.score}
+          calculateScore={this.calculateScore}
         />
         {list}
         <div className="gameControls">
           {userContent}
-          {/* Display 'Start game' button, or guess input field */}
-
-          {/* PUT ALL LOGIC BELOW IN 'IF gameOn === false */}
-
-          {/* If user not in room : display 'Join game' */}
-          {}
-          {/* IF gameON === TRUE, SHOW INPUT FIELD */}
-          {/* <form onSubmit={this.onSubmit}>
-              <input
-                type="text"
-                name="currentGuess"
-                onChange={this.onChange}
-                value={this.state.currentGuess}
-                maxLength="6"
-              ></input>
-              <button>Submit</button>
-
-            </form> */}
         </div>
       </div>
     );
@@ -175,8 +169,6 @@ class BoardContainer extends Component {
 function mapStateToProps(state) {
   console.log("redux-board", state.board);
   return {
-    jwt: state.user.jwt,
-    userId: state.user.userId,
     rooms: state.rooms,
     board: state.board,
     user: state.user
@@ -187,5 +179,6 @@ export default connect(mapStateToProps, {
   joinGame,
   startGame,
   updateBoard,
-  updatePlayer
+  updatePlayer,
+  addPoints
 })(BoardContainer);

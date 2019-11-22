@@ -97,3 +97,13 @@ function randomLetter() {
   const randLetter = chars[Math.floor(Math.random() * chars.length)];
   return randLetter;
 }
+
+export const addPoints = (userId, pointValue) => async dispatch => {
+  //Adding points to player
+  const response = await request
+    .put(`${url}/points/${userId}`)
+    .send({ points: pointValue })
+    .then(response => {
+      console.log(response.body);
+    });
+};

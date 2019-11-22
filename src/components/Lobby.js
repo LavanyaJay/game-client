@@ -26,7 +26,9 @@ class Lobby extends Component {
       .post(postUrl)
       .send({ name: value })
       .then(res => res.body.id);
+
     const response = await superagent.post(`${url}/${newRoomId}/board`);
+    console.log("response test:", response);
   };
 
   render() {
@@ -37,7 +39,7 @@ class Lobby extends Component {
     ));
     return (
       <div>
-{/* 
+        {/* 
       {user ? (<div>
           <p>Welcome back, {this.props.user.username}</p>
           <Link to='/'><p>Go back home</p></Link>
@@ -67,7 +69,7 @@ class Lobby extends Component {
 }
 
 function mapStateToProps(state) {
-  return { rooms: state.rooms, user: state.user   };
+  return { rooms: state.rooms, user: state.user };
 }
 
 export default connect(mapStateToProps, { loadLobby })(Lobby);
