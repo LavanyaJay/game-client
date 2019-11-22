@@ -19,6 +19,10 @@ class BoardContainer extends Component {
   componentDidMount() {}
 
   onSubmit = (event, userId, roomUsersIds, board) => {
+    /*  if (!this.canBeSubmitted()) {
+      event.preventDefault();
+      return;
+    } */
     event.preventDefault();
     //const y = this.state.allGuesses + this.state.currentGuess;
     const y = board.guesses + this.state.currentGuess;
@@ -36,6 +40,7 @@ class BoardContainer extends Component {
     this.validateWinner(userId, y, futurePlayer[0]);
     this.validateEndOfGame(userId, y, futurePlayer[0], board);
     this.setState({ currentGuess: "" });
+
     //this.props.addPoints(userId, this.state.score);
   };
 
@@ -94,7 +99,13 @@ class BoardContainer extends Component {
     return room.board;
   };
 
+  canBeSubmitted() {
+    const { currentGuess } = this.state;
+    return currentGuess.length === 6;
+  }
+
   render() {
+    const isEnabled = this.canBeSubmitted();
     const name = this.props.name;
     console.log("PROPS from boardcontainer", this.props);
     const { rooms } = this.props;
@@ -161,6 +172,7 @@ class BoardContainer extends Component {
             value={this.state.currentGuess}
             maxLength="6"
           ></input>
+          {/* <button disabled={!isEnabled}>Submit</button> */}
           <button>Submit</button>
           <p className='hint'><em>Please enter a 6 letter guess</em></p>
         </form>
