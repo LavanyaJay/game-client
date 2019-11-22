@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import Popup from "./Popup";
 import "../App.css";
 import ScoreboardContainer from "../components/ScoreboardContainer";
+import Song from "./Song";
 
 class Board extends Component {
   render() {
@@ -148,10 +149,13 @@ class Board extends Component {
               closePopup={this.props.togglePopup}
             />
           ) : (
-            <Popup
-              text="Congrats! You Win!!"
-              closePopup={this.props.togglePopup}
-            />
+            <div>
+              <Song />
+              <Popup
+                text="Congrats! You Win!!"
+                closePopup={this.props.togglePopup}
+              />
+            </div>
           )
         ) : null}
       </div>
