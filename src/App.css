@@ -3,6 +3,14 @@ body * {
   background-color: #ffccb3;
 }
 
+html, body, #root, #root>div {
+  height: 100%;
+}
+/* 
+#root {
+  background-color: #ffccb3;
+} */
+
 input {
   background-color: white;
   border-radius: 10%;
@@ -49,9 +57,11 @@ input {
 
 .loginForm {
   border: 2px solid black;
-  height: 300px;
-  width: 500px;
+  height: auto;
+  width: 30%;
   justify-content: center;
+  padding: 10px;
+  margin:10px;
 }
 
 .input {
@@ -110,4 +120,27 @@ input {
   margin: auto;
   border-radius: 20px;
   background: white;
+}
+
+.formBtns {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.room {
+  border: 1px solid black;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5px;
+  border-radius: 10%;
+}
+
+.roomGallery {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
