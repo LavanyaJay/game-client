@@ -6,25 +6,24 @@ import { Link } from 'react-router-dom';
 
 class LoginFormContainer extends React.Component {
   state = { username: "", password: "" };
-  id = this.props.match.params;
-  onSubmit = event => {
-    console.log("submit: ", this.id.id);
-    event.preventDefault();
-    if (this.id.id === "1") {
-      console.log("inside1: ", this.id);
-      this.props.signup(this.state.username, this.state.password);
-    }
-    if (this.id.id === "2") {
-      console.log("inside: ", this.id);
-      this.props.login(this.state.username, this.state.password);
-    }
-  };
+  // onSubmit = event => {
+  //   console.log("submit: ", this.id.id);
+  //   event.preventDefault();
+  //   if (this.id.id === "1") {
+  //     console.log("inside1: ", this.id);
+  //     this.props.signup(this.state.username, this.state.password);
+  //   }
+  //   if (this.id.id === "2") {
+  //     console.log("inside: ", this.id);
+  //     this.props.login(this.state.username, this.state.password);
+  //   }
+  // };
 
-  onChange = event => {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
-  };
+  // onChange = event => {
+  //   this.setState({
+  //     [event.target.name]: event.target.value
+  //   });
+  // };
 
   render() {
     const user = this.props.user;
