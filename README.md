@@ -17,7 +17,7 @@ The first player to guess the word wins.
 
 Here's a little demo...
 
-![gif](./demo/lingo.gif)
+![gif](./demo/game.gif)
 
 ## How to start
 
