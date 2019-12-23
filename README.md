@@ -1,4 +1,4 @@
-Lingo - an online word game
+## Lingo - an online word game
 
 Check out the remotely-hosted [website](https://secret-forest-60773.herokuapp.com/)!
 
